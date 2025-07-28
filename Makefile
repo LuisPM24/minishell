@@ -6,7 +6,7 @@
 #    By: lpalomin <lpalomin@student.42malaga.com>   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/21 08:37:02 by lpalomin          #+#    #+#              #
-#    Updated: 2025/07/22 10:35:50 by lpalomin         ###   ########.fr        #
+#    Updated: 2025/07/28 09:14:50 by lpalomin         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,6 +16,8 @@ SRCS =	minishell.c \
 		cmd_utils.c \
 		execute_utils.c \
 		quotes_utils.c \
+		dollar_utils.c \
+		more_dollar_utils.c \
 		free_utils.c \
 		other_utils.c
 

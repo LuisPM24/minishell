@@ -6,11 +6,11 @@
 /*   By: lpalomin <lpalomin@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 12:29:07 by lpalomin          #+#    #+#             */
-/*   Updated: 2025/07/22 12:48:37 by lpalomin         ###   ########.fr       */
+/*   Updated: 2025/07/24 11:03:32 by lpalomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "minishell.h"
+#include "minishell.h"
 
 int	check_unclosed_quotes(char *line)
 {

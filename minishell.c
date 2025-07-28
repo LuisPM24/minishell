@@ -6,21 +6,41 @@
 /*   By: lpalomin <lpalomin@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 08:47:30 by lpalomin          #+#    #+#             */
-/*   Updated: 2025/07/22 12:48:56 by lpalomin         ###   ########.fr       */
+/*   Updated: 2025/07/28 12:28:56 by lpalomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static int	init_cmd(t_cmd *cmd)
+{
+	cmd->amount_cmd = 0;
+	cmd->argv = malloc(sizeof(char *) * 30); // 29 argumentos mas 1 NULL
+	if (!cmd->argv)
+		return (1);
+	cmd->argv[0] = NULL;
+	return (0);
+}
+
 static void	minishell_procedure(t_cmd *cmd, char *line, char **envp)
 {
 	add_history(line);
+	if (init_cmd(cmd))
+		return ;
 	if (!check_unclosed_quotes(line))
 	{
 		ft_putstr_fd("Error: unclosed quote\n", 2);
 		return ;
 	}
 	parse_line(cmd, line);
-	print_cmd(cmd);
+	cmd->argv[cmd->amount_cmd] = NULL;
+	expand_dollars(cmd, envp);
+	//print_cmd(cmd);
+	if (cmd->amount_cmd == 0 || !cmd->argv[0] || cmd->argv[0][0] == '\0')
+	{
+		free_cmd(cmd);
+		return ;
+	}
 	execute_cmd(cmd, envp);
 	free_cmd(cmd);
 }
@@ -39,6 +59,9 @@ int	main(int argc, char **argv, char **envp)
 		if (!line)
 			break ;
 		else if (line)
+		{
 			minishell_procedure(&cmd, line, envp);
+			free(line);
+		}
 	}
 }

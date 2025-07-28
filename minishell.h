@@ -6,7 +6,7 @@
 /*   By: lpalomin <lpalomin@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 08:50:28 by lpalomin          #+#    #+#             */
-/*   Updated: 2025/07/22 12:49:34 by lpalomin         ###   ########.fr       */
+/*   Updated: 2025/07/28 09:17:36 by lpalomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,18 @@ void	init_signals(void);
 void	sigint_handler(int sig);
 // cmd_utils.c
 void	parse_line(t_cmd *cmd, char *line);
+void	modify_status(char character, int *count);
 void	print_cmd(t_cmd *cmd);
 // execute_utils.c
 void	execute_cmd(t_cmd *cmd, char **envp);
 // quotes_utils.c
 int		check_unclosed_quotes(char *line);
+// dollar_utils.c
+char	*expand_dollar_line(char *line, int position, char **envp);
+char	*get_dollar_value(char *line, int start, char **envp);
+int		search_dollars(char *line);
+// more_dollar_utils.c
+void	expand_dollars(t_cmd *cmd, char **envp);
 // free_utils.c
 void	error(void);
 void	free_cmd(t_cmd *cmd);

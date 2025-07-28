@@ -6,7 +6,7 @@
 /*   By: lpalomin <lpalomin@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 10:19:48 by lpalomin          #+#    #+#             */
-/*   Updated: 2025/07/22 20:29:31 by lpalomin         ###   ########.fr       */
+/*   Updated: 2025/07/24 11:04:02 by lpalomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ char	*remove_char(char *line, char remove)
 
 	count1 = 0;
 	count2 = 0;
-	if(!line)
+	if (!line)
 		return (NULL);
 	new_line = (char *)malloc(sizeof(char) * (ft_strlen(line) + 1));
 	if (!new_line)
