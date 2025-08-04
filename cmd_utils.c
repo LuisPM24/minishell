@@ -6,7 +6,7 @@
 /*   By: lpalomin <lpalomin@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 10:03:55 by lpalomin          #+#    #+#             */
-/*   Updated: 2025/07/25 08:38:55 by lpalomin         ###   ########.fr       */
+/*   Updated: 2025/07/29 14:02:42 by lpalomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,9 @@ void	print_cmd(t_cmd *cmd)
 	}
 }
 
+//0 -> none; 1 ->single quotes ; 2 ->doble quotes
 void	modify_status(char character, int *status)
 {
-	//0 -> none; 1 ->single quotes ; 2 ->doble quotes
 	if (character == '\'' && (*status) == 0)
 		(*status) = 1;
 	else if (character == '"' && (*status) == 0)
@@ -58,18 +58,32 @@ void	parse_line(t_cmd *cmd, char *line)
 	count2 = 0;
 	status = 0;
 	new_line = malloc(ft_strlen(line) + 1);
+	if (!new_line)
+		return ;
 	while (line[count1])
 	{
 		modify_status(line[count1], &status);
-		if ((line[count1] == ' ' || line[count1] == '|'
-				|| line[count1] == '<' || line[count1] == '>') && status == 0)
+		if ((line[count1] == ' ' || line[count1] == '|' || line[count1] == '<'
+				|| line[count1] == '>') && status == 0)
 		{
 			add_to_cmd(cmd, new_line, &count2);
 			if (line[count1] != ' ')
 			{
-				new_line[0] = line[count1];
-				new_line[1] = '\0';
-				cmd->argv[cmd->amount_cmd++] = ft_strdup(new_line);
+				if ((line[count1] == '<' && line[count1 + 1] == '<')
+					|| (line[count1] == '>' && line[count1 + 1] == '>'))
+				{
+					new_line[0] = line[count1];
+					new_line[1] = line[count1 + 1];
+					new_line[2] = '\0';
+					cmd->argv[cmd->amount_cmd++] = ft_strdup(new_line);
+					count1++;
+				}
+				else
+				{
+					new_line[0] = line[count1];
+					new_line[1] = '\0';
+					cmd->argv[cmd->amount_cmd++] = ft_strdup(new_line);
+				}
 			}
 		}
 		else

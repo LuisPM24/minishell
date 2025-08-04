@@ -6,7 +6,7 @@
 /*   By: lpalomin <lpalomin@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 13:21:57 by lpalomin          #+#    #+#             */
-/*   Updated: 2025/07/28 13:49:08 by lpalomin         ###   ########.fr       */
+/*   Updated: 2025/07/29 13:58:18 by lpalomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static char	*get_variable_name(char *line, int start)
 	if (line[start] == '{')
 		start++;
 	end = start;
-	while (line[end] && ft_isalnum(line[end])) //Ahora ft_isalnum acepta tmbn barra bajas (_)
+	while (line[end] && ft_isalnum(line[end]))
 		end++;
 	return (ft_substr(line, start, end - start));
 }
@@ -121,9 +121,6 @@ char	*expand_dollar_line(char *line, int position, char **envp)
 	free(prefix);
 	prefix = new_line;
 	new_line = ft_strjoin(prefix, suffix);
-	free(full_var);
-	free(dollar_value);
-	free(prefix);
-	free(suffix);
+	free_dollar_line(full_var, dollar_value, prefix, suffix);
 	return (new_line);
 }

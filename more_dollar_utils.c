@@ -6,7 +6,7 @@
 /*   By: lpalomin <lpalomin@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 09:00:12 by lpalomin          #+#    #+#             */
-/*   Updated: 2025/07/28 10:54:05 by lpalomin         ###   ########.fr       */
+/*   Updated: 2025/07/29 10:10:22 by lpalomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ void	expand_dollars(t_cmd *cmd, char **envp)
 {
 	int		count;
 	char	*expanded;
+	char	*rm_quotes;
 
 	count = 0;
 	while (cmd->argv && cmd->argv[count])
@@ -45,6 +46,9 @@ void	expand_dollars(t_cmd *cmd, char **envp)
 		expanded = expand_all_dollars(cmd->argv[count], envp);
 		free(cmd->argv[count]);
 		cmd->argv[count] = expanded;
+		rm_quotes = remove_quotes(cmd->argv[count]);
+		if (rm_quotes)
+			cmd->argv[count] = rm_quotes;
 		count++;
 	}
 }

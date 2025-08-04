@@ -6,7 +6,7 @@
 /*   By: lpalomin <lpalomin@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 10:21:02 by lpalomin          #+#    #+#             */
-/*   Updated: 2025/07/21 12:19:41 by lpalomin         ###   ########.fr       */
+/*   Updated: 2025/07/29 14:45:14 by lpalomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ static void	make_fork_and_execve(t_cmd *cmd, char *cmd_path, char **envp)
 	}
 	else if (pid == 0)
 	{
+		handle_redirections(cmd);
 		if (execve(cmd_path, cmd->argv, envp) == -1)
 		{
 			perror("execve");
