@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpalomin <lpalomin@student.42malaga.com>   +#+  +:+       +#+        */
+/*   By: marco <marco@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 08:50:28 by lpalomin          #+#    #+#             */
-/*   Updated: 2025/08/04 09:08:08 by lpalomin         ###   ########.fr       */
+/*   Updated: 2025/08/11 17:32:42 by marco            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,4 +67,8 @@ char	*remove_quotes(char *line);
 char	*remove_char(char *line, char remove);
 void	remove_argv_range(t_cmd *cmd, int start, int count);
 void	throw_redirection(t_cmd *cmd, int count);
+// execute_cd.c
+void execute_cd(t_cmd *cmd, char **envp);
+// ft_built_inc
+int execute_builtin(t_cmd *cmd, char **envp);	
 #endif

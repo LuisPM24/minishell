@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpalomin <lpalomin@student.42malaga.com>   +#+  +:+       +#+        */
+/*   By: marco <marco@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 10:21:02 by lpalomin          #+#    #+#             */
-/*   Updated: 2025/07/29 14:45:14 by lpalomin         ###   ########.fr       */
+/*   Updated: 2025/08/11 18:06:52 by marco            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,8 @@ void	execute_cmd(t_cmd *cmd, char **envp)
 	char	*command_path;
 
 	if (!cmd || !cmd->argv)
+		return ;
+	if (execute_builtin(cmd, envp))
 		return ;
 	command_path = find_command_path(cmd->argv[0], envp);
 	if (!command_path)

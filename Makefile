@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: lpalomin <lpalomin@student.42malaga.com>   +#+  +:+       +#+         #
+#    By: marco <marco@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/21 08:37:02 by lpalomin          #+#    #+#              #
-#    Updated: 2025/07/29 12:19:42 by lpalomin         ###   ########.fr        #
+#    Updated: 2025/08/11 17:28:46 by marco            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,30 +20,37 @@ SRCS =	minishell.c \
 		more_dollar_utils.c \
 		redirections.c \
 		free_utils.c \
-		other_utils.c
+		other_utils.c \
+		execute_cd.c  \
+		execute_builtin.c
 
-OBJS =	$(SRCS:.c=.o)
+OBJDIR = objs
+OBJS	:= $(SRCS:%.c=$(OBJDIR)/%.o)
 CC =	cc
-CFLAGS =	-Wall -Wextra -Werror -lreadline
+CFLAGS =	-Wall -Wextra -Werror 
 LIBFT =	libft/libft.a
+RM := rm -fr
+
+HEADERS := minishell.h
 
 all: $(LIBFT) $(NAME)
 
 $(NAME):$(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -lreadline -o $(NAME)
 
-%.o: %.c
+$(OBJDIR)/%.o: %.c $(HEADERS)
+	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(LIBFT):
 	$(MAKE) -C libft/
 
 clean:
-	rm -f $(OBJS)
+	$(RM) $(OBJDIR)
 	$(MAKE) -C libft/ clean
 
 fclean:	clean
-	rm -f $(NAME)
+	$(RM) $(NAME)
 	$(MAKE) -C libft/ fclean
 
 re: fclean all
