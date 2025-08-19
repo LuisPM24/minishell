@@ -6,7 +6,7 @@
 /*   By: marco <marco@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 08:50:28 by lpalomin          #+#    #+#             */
-/*   Updated: 2025/08/11 17:32:42 by marco            ###   ########.fr       */
+/*   Updated: 2025/08/19 14:50:31 by marco            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,12 @@ void	remove_argv_range(t_cmd *cmd, int start, int count);
 void	throw_redirection(t_cmd *cmd, int count);
 // execute_cd.c
 void execute_cd(t_cmd *cmd, char **envp);
-// ft_built_inc
+// execute_echo.c
+void execute_echo(t_cmd *cmd, char **envp);
+// execute_pwd.c
+void execute_pwd(t_cmd *cmd, char ** envp);
+// execute_env.c
+void execute_env(t_cmd *cmd, char **envp);
+// execute_builtin.c
 int execute_builtin(t_cmd *cmd, char **envp);	
 #endif

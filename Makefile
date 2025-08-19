@@ -6,7 +6,7 @@
 #    By: marco <marco@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/21 08:37:02 by lpalomin          #+#    #+#              #
-#    Updated: 2025/08/11 17:28:46 by marco            ###   ########.fr        #
+#    Updated: 2025/08/19 14:50:11 by marco            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,6 +22,9 @@ SRCS =	minishell.c \
 		free_utils.c \
 		other_utils.c \
 		execute_cd.c  \
+		execute_echo.c \
+		execute_pwd.c \
+		execute_env.c \
 		execute_builtin.c
 
 OBJDIR = objs
