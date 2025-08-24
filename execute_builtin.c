@@ -6,7 +6,7 @@
 /*   By: marco <marco@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 20:25:06 by marco             #+#    #+#             */
-/*   Updated: 2025/08/24 17:01:40 by marco            ###   ########.fr       */
+/*   Updated: 2025/08/24 18:40:48 by marco            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,12 @@ int execute_builtin(t_cmd *cmd, char ***envp)
         *envp = execute_export(cmd, *envp);
         return (1);
     }
-    /*else if (ft_strcmp(cmd->argv[1], "unset") == 0)
-        return (execute_unset(cmd, envp), 1);
+    else if (ft_strcmp(cmd->argv[0], "unset") == 0)
+    {
+        *envp = execute_unset(cmd, *envp);
+        return (1);
+    }
     else if (ft_strcmp(cmd->argv[0], "exit") == 0)
-        return (execute_exit(cmd, envp), 1);*/
+        return (execute_exit(cmd, *envp), 1);
     return (0);
 }

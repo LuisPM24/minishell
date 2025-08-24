@@ -1,75 +1,74 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execute_export.c                                   :+:      :+:    :+:   */
+/*   execute_unset.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: marco <marco@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/19 15:46:04 by marco             #+#    #+#             */
-/*   Updated: 2025/08/24 17:42:29 by marco            ###   ########.fr       */
+/*   Created: 2025/08/24 17:36:06 by marco             #+#    #+#             */
+/*   Updated: 2025/08/24 18:32:21 by marco            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static char **update_envp(char **envp, char *str)
+static char **cpy_new_envp(char **envp, int location)
 {
     char **new_envp;
     int i;
-    
+    int j;
+
     i = 0;
-    while (envp[i] != NULL)
+    while (envp[i])
         i++;
-    new_envp = ft_calloc(i + 2, sizeof(char *));
+    new_envp = ft_calloc(i, sizeof(char *));
     i = 0;
-    while (envp[i] != NULL)
+    j = 0;
+    while (envp[i])
     {
-        new_envp[i] = ft_strdup(envp[i]);
-        i++;
+        if (i == location)
+            i++;
+        else
+        {
+            new_envp[j] = ft_strdup(envp[i]);
+            i++;
+            j++;
+        }
     }
-    new_envp[i] = ft_strdup(str);
+    return (new_envp);
+}
+
+static char **unset_envp(char **envp, int location)
+{
+    int i;
+    char **new_envp;
+
+    
+    new_envp = cpy_new_envp(envp, location);
     i = 0;
     while (envp[i])
     {
         free(envp[i]);
         i++;
     }
-    free (envp);
+    free(envp);
     return (new_envp);
 }
 
-int check_exist(char *str, char **envp)
-{
-    int i;
-
-    i = 0;
-    while (envp[i])
-    {
-        if (ft_strncmp(envp[i], str, ft_strlen(str)) == 0 && envp[i][ft_strlen(str)] == '=')
-            return (i);
-        i++;
-    }
-    return (-1);
-}
-
-char    **execute_export(t_cmd *cmd, char **envp)
+char **execute_unset(t_cmd *cmd, char **envp)
 {
     char **str;
     int location;
     int i;
 
-    if (cmd->argv[1] == NULL)
-        return (envp);  
+    i = 0;
+    if (cmd->argv == NULL)
+        return (envp);
     str = ft_split(cmd->argv[1], '=');
     location = check_exist(str[0], envp);
-    i = 0;
     if (location == -1)
-        envp = update_envp(envp, cmd->argv[1]);
-    else
-    {
-        free (envp[location]);
-        envp[location] = ft_strdup(cmd->argv[1]);
-    }
+        return (envp);
+    envp = unset_envp(envp, location);
     while (str[i])
     {
         free(str[i]);

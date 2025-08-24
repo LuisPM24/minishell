@@ -6,7 +6,7 @@
 /*   By: marco <marco@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 08:47:30 by lpalomin          #+#    #+#             */
-/*   Updated: 2025/08/24 17:22:18 by marco            ###   ########.fr       */
+/*   Updated: 2025/08/24 17:33:32 by marco            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static void	minishell_procedure(t_cmd *cmd, char *line, char ***envp)
 	print_cmd(cmd);
 	if (cmd->amount_cmd == 0 || !cmd->argv[0] || cmd->argv[0][0] == '\0')
 		return (free_cmd(cmd));
-	execute_cmd(cmd, *envp);
+	execute_cmd(cmd, envp);
 	free_cmd(cmd);
 }
 

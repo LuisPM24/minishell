@@ -6,7 +6,7 @@
 /*   By: marco <marco@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 10:21:02 by lpalomin          #+#    #+#             */
-/*   Updated: 2025/08/24 17:00:50 by marco            ###   ########.fr       */
+/*   Updated: 2025/08/24 18:25:34 by marco            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,15 +90,15 @@ static void	make_fork_and_execve(t_cmd *cmd, char *cmd_path, char **envp)
 	}
 }
 
-void	execute_cmd(t_cmd *cmd, char **envp)
+void	execute_cmd(t_cmd *cmd, char ***envp)
 {
 	char	*command_path;
 
 	if (!cmd || !cmd->argv)
 		return ;
-	if (execute_builtin(cmd, &envp))
+	if (execute_builtin(cmd, envp) != 0)
 		return ;
-	command_path = find_command_path(cmd->argv[0], envp);
+	command_path = find_command_path(cmd->argv[0], *envp);
 	if (!command_path)
 	{
 		ft_putstr_fd("minishell: ", 2);
@@ -106,5 +106,5 @@ void	execute_cmd(t_cmd *cmd, char **envp)
 		ft_putstr_fd(": command not found\n", 2);
 		return ;
 	}
-	make_fork_and_execve(cmd, command_path, envp);
+	make_fork_and_execve(cmd, command_path, *envp);
 }

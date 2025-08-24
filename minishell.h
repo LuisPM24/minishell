@@ -6,7 +6,7 @@
 /*   By: marco <marco@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 08:50:28 by lpalomin          #+#    #+#             */
-/*   Updated: 2025/08/24 17:22:23 by marco            ###   ########.fr       */
+/*   Updated: 2025/08/24 18:40:11 by marco            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	parse_line(t_cmd *cmd, char *line);
 void	modify_status(char character, int *count);
 void	print_cmd(t_cmd *cmd);
 // execute_utils.c
-void	execute_cmd(t_cmd *cmd, char **envp);
+void	execute_cmd(t_cmd *cmd, char ***envp);
 // quotes_utils.c
 int		check_unclosed_quotes(char *line);
 // dollar_utils.c
@@ -77,6 +77,11 @@ void execute_pwd(t_cmd *cmd, char ** envp);
 void execute_env(t_cmd *cmd, char **envp);
 // execute_export.c
 char    **execute_export(t_cmd *cmd, char **envp);
+int check_exist(char *str, char **envp);
+// execute_unset.c
+char **execute_unset(t_cmd *cmd, char **envp);
+// execute_exit.c
+void execute_exit(t_cmd *cmd, char **envp);
 // execute_builtin.c
 int execute_builtin(t_cmd *cmd, char ***envp);	
 #endif

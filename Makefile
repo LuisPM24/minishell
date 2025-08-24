@@ -6,7 +6,7 @@
 #    By: marco <marco@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/21 08:37:02 by lpalomin          #+#    #+#              #
-#    Updated: 2025/08/24 16:29:15 by marco            ###   ########.fr        #
+#    Updated: 2025/08/24 18:40:00 by marco            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,6 +26,8 @@ SRCS =	minishell.c \
 		execute_pwd.c \
 		execute_env.c \
 		execute_export.c \
+		execute_unset.c \
+		execute_exit.c \
 		execute_builtin.c
 
 OBJDIR = objs
