@@ -6,7 +6,7 @@
 /*   By: marco <marco@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 08:50:28 by lpalomin          #+#    #+#             */
-/*   Updated: 2025/08/19 14:50:31 by marco            ###   ########.fr       */
+/*   Updated: 2025/08/24 17:22:23 by marco            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,8 @@ void execute_echo(t_cmd *cmd, char **envp);
 void execute_pwd(t_cmd *cmd, char ** envp);
 // execute_env.c
 void execute_env(t_cmd *cmd, char **envp);
+// execute_export.c
+char    **execute_export(t_cmd *cmd, char **envp);
 // execute_builtin.c
-int execute_builtin(t_cmd *cmd, char **envp);	
+int execute_builtin(t_cmd *cmd, char ***envp);	
 #endif
