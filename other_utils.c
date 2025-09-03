@@ -6,45 +6,60 @@
 /*   By: lpalomin <lpalomin@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 10:19:48 by lpalomin          #+#    #+#             */
-/*   Updated: 2025/08/04 09:05:52 by lpalomin         ###   ########.fr       */
+/*   Updated: 2025/08/23 09:31:55 by lpalomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	remove_argv_range(t_cmd *cmd, int start, int count)
+void	remove_argv_range(t_cmd *cmd, int cmd_index, int start, int len)
 {
-	int	count2;
+	char	**av;
+	int		count;
 
-	count2 = start;
-	while (cmd->argv[count + count2])
+	av = cmd->pipe_argv[cmd_index];
+	count = start;
+	while (av[count + len])
 	{
-		cmd->argv[count2] = cmd->argv[count + count2];
-		count2++;
+		free(av[count]);
+		av[count] = ft_strdup(av[count + len]);
+		count++;
 	}
-	while (cmd->argv[count2])
-		cmd->argv[count2++] = NULL;
-	cmd->amount_cmd -= count;
+	while (av[count])
+	{
+		free(av[count]);
+		av[count] = NULL;
+		count++;
+	}
 }
 
 char	*remove_quotes(char *line)
 {
-	int		len;
-	char	*result;
+	char	*new_line;
+	int		count1;
+	int		count2;
+	int		status;
 
+	count1 = 0;
+	count2 = 0;
+	status = 0;
 	if (!line)
 		return (NULL);
-	len = ft_strlen(line);
-	if (len < 2)
+	new_line = malloc(sizeof(char) * (ft_strlen(line) + 1));
+	if (!new_line)
 		return (NULL);
-	if ((line[0] == '\'' && line[len - 1] == '\'')
-		|| (line[0] == '"' && line[len - 1] == '"'))
+	while (line[count1])
 	{
-		result = ft_substr(line, 1, len - 2);
-		free(line);
-		return (result);
+		modify_status(line[count1], &status);
+		if (line[count1] != '\'' && line[count1] != '"' )
+		{
+			new_line[count2] = line[count1];
+			count2++;
+		}
+		count1++;
 	}
-	return (NULL);
+	new_line[count2] = '\0';
+	return (new_line);
 }
 
 char	*remove_char(char *line, char remove)
@@ -71,16 +86,4 @@ char	*remove_char(char *line, char remove)
 	}
 	new_line[count2] = '\0';
 	return (new_line);
-}
-
-void	throw_redirection(t_cmd *cmd, int count)
-{
-	if (ft_strcmp(cmd->argv[count], "<<") == 0)
-		handle_heredoc(cmd, count);
-	else if (ft_strcmp(cmd->argv[count], ">>") == 0)
-		handle_append(cmd, count);
-	else if (ft_strcmp(cmd->argv[count], "<") == 0)
-		handle_infile(cmd, count);
-	else if (ft_strcmp(cmd->argv[count], ">") == 0)
-		handle_outfile(cmd, count);
 }

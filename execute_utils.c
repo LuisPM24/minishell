@@ -6,7 +6,7 @@
 /*   By: lpalomin <lpalomin@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 10:21:02 by lpalomin          #+#    #+#             */
-/*   Updated: 2025/07/29 14:45:14 by lpalomin         ###   ########.fr       */
+/*   Updated: 2025/08/19 09:26:10 by lpalomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static char	*form_path(char **paths, char *command)
 	return (NULL);
 }
 
-static char	*find_command_path(char *command, char **envp)
+char	*find_command_path(char *command, char **envp)
 {
 	char	**paths;
 	int		count;
@@ -59,50 +59,4 @@ static char	*find_command_path(char *command, char **envp)
 	if (!paths)
 		return (NULL);
 	return (form_path(paths, command));
-}
-
-static void	make_fork_and_execve(t_cmd *cmd, char *cmd_path, char **envp)
-{
-	pid_t	pid;
-	int		status;
-
-	pid = fork();
-	if (pid == -1)
-	{
-		perror("fork");
-		free(cmd_path);
-		return ;
-	}
-	else if (pid == 0)
-	{
-		handle_redirections(cmd);
-		if (execve(cmd_path, cmd->argv, envp) == -1)
-		{
-			perror("execve");
-			free_execve(cmd, cmd_path);
-			exit(EXIT_FAILURE);
-		}
-	}
-	else
-	{
-		waitpid(pid, &status, 0);
-		free(cmd_path);
-	}
-}
-
-void	execute_cmd(t_cmd *cmd, char **envp)
-{
-	char	*command_path;
-
-	if (!cmd || !cmd->argv)
-		return ;
-	command_path = find_command_path(cmd->argv[0], envp);
-	if (!command_path)
-	{
-		ft_putstr_fd("minishell: ", 2);
-		ft_putstr_fd(cmd->argv[0], 2);
-		ft_putstr_fd(": command not found\n", 2);
-		return ;
-	}
-	make_fork_and_execve(cmd, command_path, envp);
 }

@@ -12,11 +12,11 @@
 
 #include "minishell.h"
 
-static char	*expand_all_dollars(char *line, char **envp)
+char	*expand_all_dollars(char *line, char **envp)
 {
-	int		pos;
-	char	*new_line;
 	char	*tmp;
+	char	*new_line;
+	int		pos;
 
 	if (!line)
 		return (NULL);
@@ -45,10 +45,20 @@ void	expand_dollars(t_cmd *cmd, char **envp)
 	{
 		expanded = expand_all_dollars(cmd->argv[count], envp);
 		free(cmd->argv[count]);
-		cmd->argv[count] = expanded;
-		rm_quotes = remove_quotes(cmd->argv[count]);
-		if (rm_quotes)
+		if (!expanded)
+		{
+			cmd->argv[count] = NULL;
+			count++;
+			continue ;
+		}
+		rm_quotes = remove_quotes(expanded);
+		if (rm_quotes && rm_quotes != expanded)
+		{
+			free(expanded);
 			cmd->argv[count] = rm_quotes;
+		}
+		else
+			cmd->argv[count] = expanded;
 		count++;
 	}
 }

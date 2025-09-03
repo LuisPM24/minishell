@@ -35,15 +35,23 @@ static char	*get_variable_name(char *line, int start)
 {
 	int	end;
 
+	end = start + 1;
 	if (line[start] && line[start] != '$')
 		return (NULL);
-	start++;
-	if (line[start] == '{')
-		start++;
-	end = start;
+	if (line[end] == '?')
+		return (ft_strdup("?"));
+	if (line[end] == '{')
+	{
+		end++;
+		while (line[end] && ft_isalnum(line[end]))
+			end++;
+		if (line[end] != '}')
+			return (NULL);
+		return (ft_substr(line, start + 2, end - (start + 2)));
+	}
 	while (line[end] && ft_isalnum(line[end]))
 		end++;
-	return (ft_substr(line, start, end - start));
+	return (ft_substr(line, start + 1, end - (start + 1)));
 }
 
 char	*get_dollar_value(char *line, int start, char **envp)
@@ -55,6 +63,8 @@ char	*get_dollar_value(char *line, int start, char **envp)
 	var_name = get_variable_name(line, start);
 	if (!var_name)
 		return (ft_strdup(""));
+	if (ft_strncmp(var_name, "?", 2) == 0)
+		return (free(var_name), ft_itoa(g_exit_status));
 	count = 0;
 	while (envp[count])
 	{
@@ -66,8 +76,8 @@ char	*get_dollar_value(char *line, int start, char **envp)
 	if (!envp[count])
 		return (free(var_name), ft_strdup(""));
 	equal_sign = ft_strchr(envp[count], '=');
-	if (!envp[count] || !equal_sign)
-		return (NULL);
+	if (!equal_sign)
+		return (free(var_name), NULL);
 	free(var_name);
 	return (ft_strdup(equal_sign + 1));
 }
@@ -80,10 +90,11 @@ static char	*extract_full_var(char *line, int position)
 	if (!line || line[position] != '$')
 		return (NULL);
 	count = position + 1;
+	if (line[count] == '?')
+		return (ft_substr(line, position, 2));
 	if (line[count] == '{')
 	{
-		count++;
-		start = count;
+		start = ++count;
 		while (line[count] && ft_isalnum(line[count]))
 			count++;
 		if (count == start || line[count] != '}')
@@ -111,7 +122,7 @@ char	*expand_dollar_line(char *line, int position, char **envp)
 
 	full_var = extract_full_var(line, position);
 	if (!full_var)
-		return (ft_putstr_fd("Error: bad substitution", 2), NULL);
+		return (ft_putstr_fd("Error: bad substitution\n", 2), NULL);
 	dollar_value = get_dollar_value(line, position, envp);
 	if (!dollar_value)
 		dollar_value = ft_strdup("");
