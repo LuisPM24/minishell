@@ -3,14 +3,15 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: lpalomin <lpalomin@student.42malaga.com>   +#+  +:+       +#+         #
+#    By: marco <marco@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/21 08:37:02 by lpalomin          #+#    #+#              #
-#    Updated: 2025/09/08 13:17:06 by lpalomin         ###   ########.fr        #
+#    Updated: 2025/09/08 16:49:44 by marco            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME =	minishell
+
 SRCS =	minishell.c \
 		signals.c \
 		cmd_utils.c \
@@ -33,7 +34,8 @@ SRCS =	minishell.c \
 		parse_utils.c \
 		other_utils.c
 
-OBJS =	$(SRCS:.c=.o)
+OBJDIR = objs
+OBJS =	$(SRCS:%.c=$(OBJDIR)/%.o)
 CC =	cc
 CFLAGS =	-Wall -Wextra -Werror
 LDFLAGS = -lreadline
@@ -41,17 +43,18 @@ LIBFT =	libft/libft.a
 
 all: $(LIBFT) $(NAME)
 
+$(OBJDIR)/%.o: %.c 
+	@mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) -c $< -o $@
+
 $(NAME):$(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) $(LDFLAGS) -o $(NAME)
-
-%.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
 
 $(LIBFT):
 	$(MAKE) -C libft/
 
 clean:
-	rm -f $(OBJS)
+	rm -fr $(OBJDIR)
 	$(MAKE) -C libft/ clean
 
 fclean:	clean

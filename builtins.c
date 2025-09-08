@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpalomin <lpalomin@student.42malaga.com>   +#+  +:+       +#+        */
+/*   By: marco <marco@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 10:26:07 by lpalomin          #+#    #+#             */
-/*   Updated: 2025/09/01 10:26:18 by lpalomin         ###   ########.fr       */
+/*   Updated: 2025/09/08 16:31:07 by marco            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	builtin_echo(t_cmd *cmd)
 		no_newline = 1;
 		count++;
 	}
-	while (cmd->argv[count])
+	while (cmd->argv[count] && ft_strncmp(cmd->argv[count], "<<", 2) != 0 && ft_strncmp(cmd->argv[count], ">>" , 2) != 0 && ft_strncmp(cmd->argv[count], "<", 1) != 0 && ft_strncmp(cmd->argv[count], ">", 1) != 0)
 	{
 		ft_putstr_fd(cmd->argv[count], STDOUT_FILENO);
 		if (cmd->argv[count + 1])
