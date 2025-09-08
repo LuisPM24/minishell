@@ -6,7 +6,7 @@
 #    By: lpalomin <lpalomin@student.42malaga.com>   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/21 08:37:02 by lpalomin          #+#    #+#              #
-#    Updated: 2025/08/16 20:49:30 by lpalomin         ###   ########.fr        #
+#    Updated: 2025/09/08 13:17:06 by lpalomin         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,13 +35,14 @@ SRCS =	minishell.c \
 
 OBJS =	$(SRCS:.c=.o)
 CC =	cc
-CFLAGS =	-Wall -Wextra -Werror -lreadline
+CFLAGS =	-Wall -Wextra -Werror
+LDFLAGS = -lreadline
 LIBFT =	libft/libft.a
 
 all: $(LIBFT) $(NAME)
 
 $(NAME):$(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) $(LDFLAGS) -o $(NAME)
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
