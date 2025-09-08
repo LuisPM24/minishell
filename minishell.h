@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpalomin <lpalomin@student.42malaga.com>   +#+  +:+       +#+        */
+/*   By: marco <marco@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 08:50:28 by lpalomin          #+#    #+#             */
-/*   Updated: 2025/08/23 09:29:06 by lpalomin         ###   ########.fr       */
+/*   Updated: 2025/09/08 18:58:51 by marco            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ void	free_envp(char **envp);
 // builtins.c
 int		builtin_echo(t_cmd *cmd);
 int		builtin_cd(t_cmd *cmd);
-int		builtin_pwd(void);
+int		builtin_pwd(char **envp);
 int		builtin_export(t_cmd *cmd, char **envp);
 int		builtin_unset(t_cmd *cmd, char **envp);
 int		builtin_env(char **envp);

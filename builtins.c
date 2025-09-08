@@ -6,7 +6,7 @@
 /*   By: marco <marco@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 10:26:07 by lpalomin          #+#    #+#             */
-/*   Updated: 2025/09/08 16:31:07 by marco            ###   ########.fr       */
+/*   Updated: 2025/09/08 19:06:01 by marco            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,12 +46,23 @@ int	builtin_cd(t_cmd *cmd)
 	return (0);
 }
 
-int	builtin_pwd(void)
+int	builtin_pwd(char **envp)
 {
 	char	cwd[PATH_MAX];
+	char **split;
+	int i;
 
+	i = 0;
 	if (!getcwd(cwd, sizeof(cwd)))
-		return (perror("pwd"), 1);
+	{
+		while (ft_strncmp(envp[i], "PWD=", 4) != 0)
+			i++;
+		split = ft_split(envp[i], '=');
+		ft_putstr_fd(split[1], STDOUT_FILENO);
+		write(STDOUT_FILENO, "\n", 1);
+		free(split);
+		return (0);
+	}
 	ft_putstr_fd(cwd, STDOUT_FILENO);
 	write(STDOUT_FILENO, "\n", 1);
 	return (0);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_builtins.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpalomin <lpalomin@student.42malaga.com>   +#+  +:+       +#+        */
+/*   By: marco <marco@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 10:25:42 by lpalomin          #+#    #+#             */
-/*   Updated: 2025/09/01 10:25:52 by lpalomin         ###   ########.fr       */
+/*   Updated: 2025/09/08 18:58:33 by marco            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	execute_builtin(t_cmd *cmd, char **envp)
 	else if (ft_strcmp(cmd->argv[0], "cd") == 0)
 		return (builtin_cd(cmd));
 	else if (ft_strcmp(cmd->argv[0], "pwd") == 0)
-		return (builtin_pwd());
+		return (builtin_pwd(envp));
 	else if (ft_strcmp(cmd->argv[0], "export") == 0)
 		return (builtin_export(cmd, envp));
 	else if (ft_strcmp(cmd->argv[0], "unset") == 0)
