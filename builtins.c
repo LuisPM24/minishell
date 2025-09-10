@@ -6,7 +6,7 @@
 /*   By: marco <marco@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 10:26:07 by lpalomin          #+#    #+#             */
-/*   Updated: 2025/09/10 19:02:34 by marco            ###   ########.fr       */
+/*   Updated: 2025/09/10 19:15:48 by marco            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	builtin_echo(t_cmd *cmd)
 
 	count = 1;
 	no_newline = 0;
-	if (cmd->argv[count] && ft_strcmp(cmd->argv[count], "-n") == 0)
+	if (cmd->argv[count] && ft_strncmp(cmd->argv[count], "-n", 2) == 0)
 	{
 		no_newline = 1;
 		count++;

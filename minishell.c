@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpalomin <lpalomin@student.42malaga.com>   +#+  +:+       +#+        */
+/*   By: marco <marco@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 08:47:30 by lpalomin          #+#    #+#             */
-/*   Updated: 2025/08/19 08:54:04 by lpalomin         ###   ########.fr       */
+/*   Updated: 2025/09/10 19:20:36 by marco            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,21 +58,21 @@ static int	init_cmd(t_cmd *cmd)
 
 static void	print_pipe_argv(t_cmd *cmd)
 {
-	int	count;
+	/*int	count;
 
-	count = 0;
+	count = 0;*/
 	if (!cmd->pipe_argv)
 	{
 		printf("pipe_argv is NULL\n");
 		return ;
 	}
-	while (cmd->pipe_argv[count])
+	/*while (cmd->pipe_argv[count])
 	{
 		printf("Command %d\n-----\n", count);
 		print_cmd(cmd->pipe_argv[count]);
 		printf("---------\n");
 		count++;
-	}
+	}*/
 }
 
 static void	minishell_procedure(t_cmd *cmd, char *line, char **envp)
