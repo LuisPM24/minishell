@@ -6,7 +6,7 @@
 /*   By: marco <marco@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 08:47:30 by lpalomin          #+#    #+#             */
-/*   Updated: 2025/09/10 19:20:36 by marco            ###   ########.fr       */
+/*   Updated: 2025/09/14 09:59:36 by lpalomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,9 +58,9 @@ static int	init_cmd(t_cmd *cmd)
 
 static void	print_pipe_argv(t_cmd *cmd)
 {
-	/*int	count;
+	int	count;
 
-	count = 0;*/
+	count = 0;
 	if (!cmd->pipe_argv)
 	{
 		printf("pipe_argv is NULL\n");

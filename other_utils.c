@@ -51,7 +51,7 @@ char	*remove_quotes(char *line)
 	while (line[count1])
 	{
 		modify_status(line[count1], &status);
-		if (line[count1] != '\'' && line[count1] != '"' )
+		if ((status == 2 && line[count1] != '"') || (status == 1 && line[count1] != '\'') || (status == 0 && line[count1] != '\'' && line[count1] != '"'))
 		{
 			new_line[count2] = line[count1];
 			count2++;
