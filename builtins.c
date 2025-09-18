@@ -12,22 +12,25 @@
 
 #include "minishell.h"
 
-int	builtin_echo(t_cmd *cmd)
+int	builtin_echo(t_cmd *cmd, int pipe_cmd)
 {
 	int	count;
 	int	no_newline;
 
 	count = 1;
 	no_newline = 0;
-	if (cmd->argv[count] && ft_strncmp(cmd->argv[count], "-n", 2) == 0)
+	if (!cmd->pipe_argv[pipe_cmd] || !cmd->pipe_argv[pipe_cmd][0])
+		return (1);
+	if (cmd->pipe_argv[pipe_cmd][count] &&
+		ft_strncmp(cmd->pipe_argv[pipe_cmd][count], "-n", 2) == 0)
 	{
 		no_newline = 1;
 		count++;
 	}
-	while (cmd->argv[count] && ft_strncmp(cmd->argv[count], "<<", 2) != 0 && ft_strncmp(cmd->argv[count], ">>" , 2) != 0 && ft_strncmp(cmd->argv[count], "<", 1) != 0 && ft_strncmp(cmd->argv[count], ">", 1) != 0)
+	while (cmd->pipe_argv[pipe_cmd][count])
 	{
-		ft_putstr_fd(cmd->argv[count], STDOUT_FILENO);
-		if (cmd->argv[count + 1])
+		ft_putstr_fd(cmd->pipe_argv[pipe_cmd][count], STDOUT_FILENO);
+		if (cmd->pipe_argv[pipe_cmd][count + 1])
 			write(STDOUT_FILENO, " ", 1);
 		count++;
 	}
@@ -36,27 +39,48 @@ int	builtin_echo(t_cmd *cmd)
 	return (0);
 }
 
-int	builtin_cd(t_cmd *cmd)
+int	builtin_cd(t_cmd *cmd, int pipe_cmd)
 {
-	if (!cmd->argv[1])
-		return (ft_putstr_fd("minishell: cd: missing argument\n", STDERR_FILENO)
-			, 1);
-	if (chdir(cmd->argv[1]) != 0)
-		return (perror("cd"), 1);
+	char	**argv;
+
+	argv = cmd->pipe_argv[pipe_cmd];
+	if (!argv[1])
+	{
+		ft_putstr_fd("minishell: cd: missing argument\n", STDERR_FILENO);
+		g_exit_status = 1;
+		return (1);
+	}
+	if (argv[2])
+	{
+		ft_putstr_fd("minishell: cd: demasiados argumentos\n", STDERR_FILENO);
+		g_exit_status = 1;
+		return (1);
+	}
+	if (chdir(argv[1]) != 0)
+	{
+		perror("cd");
+		g_exit_status = 1;
+		return (1);
+	}
 	return (0);
 }
 
 int	builtin_pwd(char **envp)
 {
 	char	cwd[PATH_MAX];
-	int i;
-	char **split;
-	
+	int		i;
+	char	**split;
+
 	i = 0;
 	if (!getcwd(cwd, sizeof(cwd)))
 	{
-		while (ft_strncmp(envp[i], "OLDPWD=", 7) != 0)
+		while (envp[i] && ft_strncmp(envp[i], "OLDPWD=", 7) != 0)
 			i++;
+		if (!envp[i])
+		{
+			ft_putstr_fd("minishell: pwd: OLDPWD not found\n", STDERR_FILENO);
+			return (1);
+		}
 		split = ft_split(envp[i], '=');
 		ft_putstr_fd(split[1], STDOUT_FILENO);
 		write(STDOUT_FILENO, "\n", 1);
@@ -83,16 +107,30 @@ int	builtin_env(char **envp)
 	return (0);
 }
 
-int	builtin_exit(t_cmd *cmd)
+int	builtin_exit(t_cmd *cmd, int pipe_cmd)
 {
-	int	status;
+	char	**argv;
+	int		i;
 
-	if (!cmd || !cmd->argv)
+	if (!cmd->pipe_argv[pipe_cmd] || !cmd->pipe_argv[pipe_cmd][0])
 		exit(g_exit_status);
-	if (cmd->argv[1])
+	argv = cmd->pipe_argv[pipe_cmd];
+	if (argv[1])
 	{
-		status = ft_atoi(cmd->argv[1]);
-		exit(status);
+		i = 0;
+		if (argv[1][i] == '-' || argv[1][i] == '+')
+			i++;
+		while (argv[1][i] && ft_isdigit(argv[1][i]))
+			i++;
+		if (argv[1][i] != '\0')
+		{
+			perror("minishell: exit: numeric argument required");
+			exit(2);
+		}
+		if (argv[2])
+			return (ft_putstr_fd("minishell: exit: demasiados argumentos"
+					, STDERR_FILENO), 1);
+		exit(ft_atoi(argv[1]) % 256);
 	}
 	exit(g_exit_status);
 }

@@ -69,7 +69,7 @@ int	fork_and_exec(t_cmd *cmd, char **envp, int pipe_cmd, int *fds)
 		apply_pipe_fds(fds);
 		check_and_apply_redirs(cmd, pipe_cmd);
 		if (is_builtin(cmd->pipe_argv[pipe_cmd][0]))
-			exit(execute_builtin(cmd, envp));
+			exit(execute_builtin(cmd, envp, pipe_cmd));
 		exec_command_pipe(cmd, envp, pipe_cmd);
 	}
 	return (pid);

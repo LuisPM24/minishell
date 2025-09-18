@@ -33,6 +33,39 @@ void	remove_argv_range(t_cmd *cmd, int cmd_index, int start, int len)
 	}
 }
 
+char	*remove_last_quotes(char *line)
+{
+	char	*new_line;
+	int		count1;
+	int		count2;
+	int		status;
+
+	count1 = 0;
+	count2 = 0;
+	status = 0;
+	if (!line)
+		return (NULL);
+	new_line = malloc(sizeof(char) * (ft_strlen(line) + 1));
+	if (!new_line)
+		return (NULL);
+	if ((line[0] == '"' || line[0] == '\'') && (line[1] == '<' || line[1] == '>'))
+	{
+		while (line[count1])
+		{
+			modify_status(line[count1], &status);
+			if ((status == 2 && line[count1] != '"') || (status == 1
+						&& line[count1] != '\'') || (status == 0
+						&& line[count1] != '\'' && line[count1] != '"'))
+				new_line[count2++] = line[count1];
+			count1++;
+		}
+	}
+	else
+		return(free(new_line), ft_strdup(line));
+	new_line[count2] = '\0';
+	return (new_line);
+}
+
 char	*remove_quotes(char *line)
 {
 	char	*new_line;
@@ -51,7 +84,11 @@ char	*remove_quotes(char *line)
 	while (line[count1])
 	{
 		modify_status(line[count1], &status);
-		if ((status == 2 && line[count1] != '"') || (status == 1 && line[count1] != '\'') || (status == 0 && line[count1] != '\'' && line[count1] != '"'))
+		if (count1 == 0 && status != 0 && (line[count1 + 1] == '<' || line[count1 + 1] == '>'))
+			return (ft_strdup(line));
+		else if ((status == 2 && line[count1] != '"') || (status == 1
+			&& line[count1] != '\'') || (status == 0
+			&& line[count1] != '\'' && line[count1] != '"'))
 		{
 			new_line[count2] = line[count1];
 			count2++;

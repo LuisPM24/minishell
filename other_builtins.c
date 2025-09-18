@@ -33,24 +33,53 @@ static void	put_env_var(char **env, char *str)
 			return (free(env[count]), env[count] = ft_strdup(str), free(name));
 		count++;
 	}
-	env[count] = strdup(str);
+	env[count] = ft_strdup(str);
 	env[count + 1] = NULL;
 	free(name);
 }
 
-int	builtin_export(t_cmd *cmd, char **envp)
+static int	is_valid_identifier(const char *str)
+{
+	int	i;
+
+	i = 0;
+	if (!str || !str[0])
+		return (0);
+	if (!((str[0] >= 'A' && str[0] <= 'Z')
+			|| (str[0] >= 'a' && str[0] <= 'z')
+			|| str[0] == '_'))
+		return (0);
+	i = 1;
+	while (str[i] && str[i] != '=')
+	{
+		if (!(ft_isalpha(str[i]) || str[i] == '_'))
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+int	builtin_export(t_cmd *cmd, int pipe_cmd, char **envp)
 {
 	int	count;
+	int	status;
 
 	if (!envp)
 		return (1);
 	count = 1;
-	while (cmd->argv[count])
+	status = 0;
+	while (cmd->pipe_argv[pipe_cmd][count])
 	{
-		put_env_var(envp, cmd->argv[count]);
+		if (!is_valid_identifier(cmd->argv[count]))
+		{
+			put_error(cmd->argv[count]);
+			status = 1;
+		}
+		else
+			put_env_var(envp, cmd->argv[count]);
 		count++;
 	}
-	return (0);
+	return (status);
 }
 
 static void	unset_env_var(char **envp, char *name)
@@ -60,11 +89,11 @@ static void	unset_env_var(char **envp, char *name)
 
 	if (!envp || !name)
 		return ;
-	len = strlen(name);
+	len = ft_strlen(name);
 	count = 0;
 	while (envp[count])
 	{
-		if (strncmp(envp[count], name, len) == 0 && envp[count][len] == '=')
+		if (ft_strncmp(envp[count], name, len) == 0 && envp[count][len] == '=')
 		{
 			free(envp[count]);
 			while (envp[count + 1])
@@ -79,16 +108,16 @@ static void	unset_env_var(char **envp, char *name)
 	}
 }
 
-int	builtin_unset(t_cmd *cmd, char **envp)
+int	builtin_unset(t_cmd *cmd, int pipe_cmd, char **envp)
 {
 	int	count;
 
 	if (!envp)
 		return (1);
 	count = 1;
-	while (cmd->argv[count])
+	while (cmd->pipe_argv[pipe_cmd][count])
 	{
-		unset_env_var(envp, cmd->argv[count]);
+		unset_env_var(envp, cmd->pipe_argv[pipe_cmd][count]);
 		count++;
 	}
 	return (0);

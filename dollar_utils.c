@@ -40,6 +40,8 @@ static char	*get_variable_name(char *line, int start)
 		return (NULL);
 	if (line[end] == '?')
 		return (ft_strdup("?"));
+	if (!line[end] || !(ft_isalnum(line[end]) || line[end] == '_'))
+		return (ft_strdup("$"));
 	if (line[end] == '{')
 	{
 		end++;
@@ -65,6 +67,8 @@ char	*get_dollar_value(char *line, int start, char **envp)
 		return (ft_strdup(""));
 	if (ft_strncmp(var_name, "?", 2) == 0)
 		return (free(var_name), ft_itoa(g_exit_status));
+	if (ft_strncmp(var_name, "$", 2) == 0)
+		return (ft_strdup("$"));
 	count = 0;
 	while (envp[count])
 	{
@@ -92,6 +96,8 @@ static char	*extract_full_var(char *line, int position)
 	count = position + 1;
 	if (line[count] == '?')
 		return (ft_substr(line, position, 2));
+	if (!line[count] || !(ft_isalnum(line[count]) || line[count] == '_'))
+		return (ft_substr(line, position, 1));
 	if (line[count] == '{')
 	{
 		start = ++count;
@@ -122,7 +128,7 @@ char	*expand_dollar_line(char *line, int position, char **envp)
 
 	full_var = extract_full_var(line, position);
 	if (!full_var)
-		return (ft_putstr_fd("Error: bad substitution\n", 2), NULL);
+		return (ft_putstr_fd("Error: bad substitution", 2), NULL);
 	dollar_value = get_dollar_value(line, position, envp);
 	if (!dollar_value)
 		dollar_value = ft_strdup("");

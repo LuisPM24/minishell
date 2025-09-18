@@ -71,6 +71,7 @@ char	*get_dollar_value(char *line, int start, char **envp);
 int		search_dollars(char *line);
 // more_dollar_utils.c
 void	expand_dollars(t_cmd *cmd, char **envp);
+void	remove_quotes_pipe_argv(t_cmd *cmd);
 char	*expand_all_dollars(char *line, char **envp);
 // redirections.c
 void	handle_redirections(t_redir *list);
@@ -94,7 +95,6 @@ void	parse_pipe_argv(t_cmd *cmd);
 // execute_pipes.c
 void	execute_pipes(t_cmd *cmd, char **envp);
 // free_utils.c
-void	error(void);
 void	free_cmd(t_cmd *cmd);
 void	free_split(char **split);
 void	free_execve(t_cmd *cmd, char *cmd_path);
@@ -108,18 +108,20 @@ void	update_fds(int *prev_fd, int pipe_fd[2]);
 int		fork_and_exec(t_cmd *cmd, char **envp, int pipe_cmd, int *fds);
 // execute_builtins.c
 int		is_builtin(char *cmd_name);
-int		execute_builtin(t_cmd *cmd, char **envp);
+void	put_error(const char *arg);
+int		execute_builtin(t_cmd *cmd, char **envp, int pipe_cmd);
 void	free_envp(char **envp);
 // builtins.c
-int		builtin_echo(t_cmd *cmd);
-int		builtin_cd(t_cmd *cmd);
+int		builtin_echo(t_cmd *cmd, int pipe_cmd);
+int		builtin_cd(t_cmd *cmd, int pipe_cmd);
 int		builtin_pwd(char **envp);
-int		builtin_export(t_cmd *cmd, char **envp);
-int		builtin_unset(t_cmd *cmd, char **envp);
+int		builtin_export(t_cmd *cmd, int pipe_cmd, char **envp);
+int		builtin_unset(t_cmd *cmd, int pipe_cmd, char **envp);
 int		builtin_env(char **envp);
-int		builtin_exit(t_cmd *cmd);
+int		builtin_exit(t_cmd *cmd, int pipe_cmd);
 // other_utils.c
 char	*remove_quotes(char *line);
+char	*remove_last_quotes(char *line);
 char	*remove_char(char *line, char remove);
 void	remove_argv_range(t_cmd *cmd, int pipe_cmd, int start, int count);
 #endif

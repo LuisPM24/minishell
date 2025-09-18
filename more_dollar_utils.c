@@ -17,21 +17,51 @@ char	*expand_all_dollars(char *line, char **envp)
 	char	*tmp;
 	char	*new_line;
 	int		pos;
+	int		offset;
 
 	if (!line)
 		return (NULL);
 	tmp = ft_strdup(line);
 	if (!tmp)
 		return (NULL);
-	pos = search_dollars(tmp);
+	offset = 0;
+	pos = search_dollars(tmp + offset);
 	while (pos != -1)
 	{
+		pos += offset;
 		new_line = expand_dollar_line(tmp, pos, envp);
 		free(tmp);
 		tmp = new_line;
-		pos = search_dollars(tmp);
+		if (!tmp)
+			return (NULL);
+		offset = pos + 1;
+		pos = search_dollars(tmp + offset);
 	}
 	return (tmp);
+}
+
+void	remove_quotes_pipe_argv(t_cmd *cmd)
+{
+	int		count1;
+	int		count2;
+	char	*rm_quotes;
+
+	count1 = 0;
+	while (count1 < cmd->amount_cmd)
+	{
+		count2 = 0;
+		while (cmd->pipe_argv[count1] && cmd->pipe_argv[count1][count2])
+		{
+			rm_quotes = remove_last_quotes(cmd->pipe_argv[count1][count2]);
+			if (rm_quotes && rm_quotes != cmd->pipe_argv[count1][count2])
+			{
+				free(cmd->pipe_argv[count1][count2]);
+				cmd->pipe_argv[count1][count2] = rm_quotes;
+			}
+			count2++;
+		}
+		count1++;
+	}
 }
 
 void	expand_dollars(t_cmd *cmd, char **envp)

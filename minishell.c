@@ -61,6 +61,7 @@ static void	print_pipe_argv(t_cmd *cmd)
 	int	count;
 
 	count = 0;
+	(void)count;
 	if (!cmd->pipe_argv)
 	{
 		printf("pipe_argv is NULL\n");
@@ -97,6 +98,7 @@ static void	minishell_procedure(t_cmd *cmd, char *line, char **envp)
 	parse_all_redirs(cmd);
 	prepare_heredocs(cmd, envp);
 	print_pipe_argv(cmd);
+	remove_quotes_pipe_argv(cmd);
 	execute_pipes(cmd, envp);
 	free_cmd(cmd);
 }

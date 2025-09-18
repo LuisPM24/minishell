@@ -12,37 +12,12 @@
 
 #include "minishell.h"
 
-/*
-int	check_unclosed_quotes(char *line)
-{
-	int	count;
-	int	simple_quotes;
-	int	double_quotes;
-
-	count = 0;
-	simple_quotes = 0;
-	double_quotes = 0;
-	while (line[count])
-	{
-		if (line[count] == '\'')
-			simple_quotes++;
-		if (line[count] == '"')
-			double_quotes++;
-		count++;
-	}
-	if (simple_quotes % 2 == 0 && double_quotes % 2 == 0)
-		return (1);
-	else
-		return (0);
-}
-*/
-
 int	check_unclosed_quotes(char *line)
 {
 	char	aux_char;
-	int	count;
-	int	inside;
-	int	amount;
+	int		count;
+	int		inside;
+	int		amount;
 
 	aux_char = '\0';
 	count = 0;

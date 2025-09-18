@@ -49,8 +49,7 @@ void	parse_redirs_for_command(t_cmd *cmd, int i)
 		{
 			if (!av[j + 1])
 			{
-				ft_putstr_fd(
-					"minishell: syntax error near redirection\n", 2);
+				ft_putstr_fd("minishell: syntax error near redirection\n", 2);
 				break ;
 			}
 			type = get_redir_type(av[j]);

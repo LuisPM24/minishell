@@ -60,7 +60,7 @@ static pid_t	exec_one_pipe(t_cmd *cmd, char **envp,
 	if (cmd->amount_cmd == 1 && is_builtin(cmd->pipe_argv[pipe_cmd][0])
 		&& is_parent_builtin(cmd->pipe_argv[pipe_cmd][0]))
 	{
-		g_exit_status = execute_builtin(cmd, envp);
+		g_exit_status = execute_builtin(cmd, envp, pipe_cmd);
 		update_fds(prev_fd, pipe_fd);
 		return (-1);
 	}
