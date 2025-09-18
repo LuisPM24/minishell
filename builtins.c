@@ -6,7 +6,7 @@
 /*   By: marco <marco@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 10:26:07 by lpalomin          #+#    #+#             */
-/*   Updated: 2025/09/10 19:15:48 by marco            ###   ########.fr       */
+/*   Updated: 2025/09/18 17:52:50 by marco            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int	builtin_cd(t_cmd *cmd, int pipe_cmd)
 	}
 	if (argv[2])
 	{
-		ft_putstr_fd("minishell: cd: demasiados argumentos\n", STDERR_FILENO);
+		ft_putstr_fd("minishell: cd: too many arguments\n", STDERR_FILENO);
 		g_exit_status = 1;
 		return (1);
 	}
@@ -128,7 +128,7 @@ int	builtin_exit(t_cmd *cmd, int pipe_cmd)
 			exit(2);
 		}
 		if (argv[2])
-			return (ft_putstr_fd("minishell: exit: demasiados argumentos"
+			return (ft_putstr_fd("minishell: exit: too many arguments"
 					, STDERR_FILENO), 1);
 		exit(ft_atoi(argv[1]) % 256);
 	}
