@@ -26,7 +26,7 @@ static char	**dup_envp(char **envp)
 	count = 0;
 	while (envp[count])
 		count++;
-	new_env = malloc((count + 1) * sizeof(char *));
+	new_env = malloc((count + 100) * sizeof(char *));
 	if (!new_env)
 		return (NULL);
 	env_count = 0;
@@ -37,12 +37,15 @@ static char	**dup_envp(char **envp)
 		{
 			while (env_count-- > 0)
 				free(new_env[env_count]);
-			return (free(new_env), NULL);
+			free(new_env);
+			return (NULL);
 		}
 		env_count++;
 	}
-	return (new_env[count] = NULL, new_env);
+	new_env[env_count] = NULL;
+	return (new_env);
 }
+
 
 static int	init_cmd(t_cmd *cmd)
 {
