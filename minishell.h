@@ -47,6 +47,8 @@ typedef struct s_redir
 typedef struct s_cmd
 {
 	int		amount_cmd;
+	int		cur_pipe_read;
+	int		cur_pipe_write;
 	char	**argv;
 	char	***pipe_argv;
 	t_redir	**redirs;

@@ -46,7 +46,6 @@ static char	**dup_envp(char **envp)
 	return (new_env);
 }
 
-
 static int	init_cmd(t_cmd *cmd)
 {
 	cmd->amount_cmd = 0;
@@ -94,13 +93,13 @@ static void	minishell_procedure(t_cmd *cmd, char *line, char **envp)
 	if (cmd->amount_cmd == 0 || !cmd->argv[0] || cmd->argv[0][0] == '\0')
 		return (free_cmd(cmd));
 	parse_pipe_argv(cmd);
+	print_pipe_argv(cmd);
 	cmd->amount_cmd = count_pipes(cmd) + 1;
 	while (cmd->pipe_argv[cmd->amount_cmd])
 		cmd->amount_cmd++;
 	redirs_init(cmd);
 	parse_all_redirs(cmd);
 	prepare_heredocs(cmd, envp);
-	print_pipe_argv(cmd);
 	remove_quotes_pipe_argv(cmd);
 	execute_pipes(cmd, envp);
 	free_cmd(cmd);

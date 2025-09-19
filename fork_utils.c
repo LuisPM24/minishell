@@ -66,7 +66,14 @@ int	fork_and_exec(t_cmd *cmd, char **envp, int pipe_cmd, int *fds)
 	}
 	if (pid == 0)
 	{
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
+		signal(SIGPIPE, SIG_DFL);
 		apply_pipe_fds(fds);
+		if (cmd->cur_pipe_read != -1 && cmd->cur_pipe_read != fds[0])
+			close(cmd->cur_pipe_read);
+		if (cmd->cur_pipe_write != -1 && cmd->cur_pipe_write != fds[1])
+			close(cmd->cur_pipe_write);
 		check_and_apply_redirs(cmd, pipe_cmd);
 		if (is_builtin(cmd->pipe_argv[pipe_cmd][0]))
 			exit(execute_builtin(cmd, envp, pipe_cmd));

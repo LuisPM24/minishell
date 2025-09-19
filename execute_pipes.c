@@ -64,8 +64,14 @@ static pid_t	exec_one_pipe(t_cmd *cmd, char **envp,
 		update_fds(prev_fd, pipe_fd);
 		return (-1);
 	}
+	cmd->cur_pipe_read = pipe_fd[0];
+	cmd->cur_pipe_write = pipe_fd[1];
 	pid = fork_and_exec(cmd, envp, pipe_cmd, fds);
-	update_fds(prev_fd, pipe_fd);
+	if (*prev_fd != -1)
+		close(*prev_fd);
+	if (pipe_fd[1] != -1)
+		close(pipe_fd[1]);
+	*prev_fd = pipe_fd[0];
 	return (pid);
 }
 
@@ -84,6 +90,8 @@ void	execute_pipes(t_cmd *cmd, char **envp)
 		last_pid = exec_one_pipe(cmd, envp, pipe_cmd, &prev_fd);
 		pipe_cmd++;
 	}
+	if (prev_fd != -1)
+		close(prev_fd);
 	if (last_pid != -1)
 		wait_for_children(cmd->amount_cmd, last_pid);
 }
