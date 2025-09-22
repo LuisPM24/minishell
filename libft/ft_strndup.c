@@ -1,37 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signals.c                                          :+:      :+:    :+:   */
+/*   ft_strndup.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lpalomin <lpalomin@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/21 09:00:44 by lpalomin          #+#    #+#             */
-/*   Updated: 2025/07/21 09:07:06 by lpalomin         ###   ########.fr       */
+/*   Created: 2025/09/20 11:52:33 by lpalomin          #+#    #+#             */
+/*   Updated: 2025/09/20 11:53:25 by lpalomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-volatile sig_atomic_t	g_signal = 0;
-
-void	sigpipe_handler(int sig)
+char	*ft_strndup(const char *s, size_t n)
 {
-	(void)sig;
-	exit(128 + SIGPIPE);
-}
+	size_t	len;
+	char	*dup;
 
-void	sigint_handler(int sig)
-{
-	g_signal = sig;
-	write(STDOUT_FILENO, "\n", 1);
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_redisplay();
-}
-
-void	init_signals(void)
-{
-	signal(SIGINT, sigint_handler);
-	signal(SIGQUIT, SIG_IGN);
-	signal(SIGPIPE, SIG_IGN);
+	if (!s)
+		return (NULL);
+	len = 0;
+	while (s[len] && len < n)
+		len++;
+	dup = (char *)malloc(len + 1);
+	if (!dup)
+		return (NULL);
+	ft_memcpy(dup, s, len);
+	dup[len] = '\0';
+	return (dup);
 }

@@ -68,7 +68,7 @@ int	fork_and_exec(t_cmd *cmd, char **envp, int pipe_cmd, int *fds)
 	{
 		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_DFL);
-		signal(SIGPIPE, SIG_DFL);
+		signal(SIGPIPE, SIG_IGN);
 		apply_pipe_fds(fds);
 		if (cmd->cur_pipe_read != -1 && cmd->cur_pipe_read != fds[0])
 			close(cmd->cur_pipe_read);

@@ -35,10 +35,13 @@ char	*expand_all_dollars(char *line, char **envp)
 		if (!tmp)
 			return (NULL);
 		offset = pos + 1;
+		if (offset >= (int)ft_strlen(tmp))
+			offset = 0;
 		pos = search_dollars(tmp + offset);
 	}
 	return (tmp);
 }
+
 
 void	remove_quotes_pipe_argv(t_cmd *cmd)
 {
