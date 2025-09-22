@@ -75,7 +75,6 @@ static pid_t	exec_one_pipe(t_cmd *cmd, char **envp,
 	return (pid);
 }
 
-
 void	execute_pipes(t_cmd *cmd, char **envp)
 {
 	int		pipe_cmd;
