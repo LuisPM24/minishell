@@ -42,7 +42,6 @@ char	*expand_all_dollars(char *line, char **envp)
 	return (tmp);
 }
 
-
 void	remove_quotes_pipe_argv(t_cmd *cmd)
 {
 	int		count1;
@@ -70,6 +69,7 @@ void	remove_quotes_pipe_argv(t_cmd *cmd)
 void	expand_dollars(t_cmd *cmd, char **envp)
 {
 	int		count;
+	int		i;
 	char	*expanded;
 	char	*rm_quotes;
 
@@ -77,13 +77,19 @@ void	expand_dollars(t_cmd *cmd, char **envp)
 	while (cmd->argv && cmd->argv[count])
 	{
 		expanded = expand_all_dollars(cmd->argv[count], envp);
-		free(cmd->argv[count]);
-		if (!expanded)
+		if (!expanded || expanded[0] == '\0')
 		{
-			cmd->argv[count] = NULL;
-			count++;
+			free(cmd->argv[count]);
+			free(expanded);
+			i = count;
+			while (cmd->argv[i])
+			{
+			cmd->argv[i] = cmd->argv[i + 1];
+				i++;
+			}
 			continue ;
 		}
+		free(cmd->argv[count]);
 		rm_quotes = remove_quotes(expanded);
 		if (rm_quotes && rm_quotes != expanded)
 		{

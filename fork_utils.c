@@ -37,21 +37,49 @@ static void	check_and_apply_redirs(t_cmd *cmd, int pipe_cmd)
 	}
 }
 
+static void	pipe_error_selector(char *path, char *argv0)
+{
+	if (!path || access(path, F_OK) != 0)
+	{
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(argv0, 2);
+		ft_putstr_fd(": command not found\n", 2);
+		exit(127);
+	}
+	if (access(path, X_OK) != 0)
+	{
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(path, 2);
+		ft_putstr_fd(": Permission denied\n", 2);
+		exit(126);
+	}
+	if (errno == ENOENT)
+	{
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(path, 2);
+		ft_putstr_fd(": command not found\n", 2);
+		exit(127);
+	}
+	if (errno == EACCES)
+	{
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(path, 2);
+		ft_putstr_fd(": Permission denied\n", 2);
+		exit(126);
+	}
+	perror(path);
+	exit(126);
+}
+
 static void	exec_command_pipe(t_cmd *cmd, char **envp, int pipe_cmd)
 {
 	char	*cmd_path;
 
 	cmd_path = find_command_path(cmd->pipe_argv[pipe_cmd][0], envp);
-	if (!cmd_path)
-	{
-		ft_putstr_fd("minishell: ", 2);
-		ft_putstr_fd(cmd->pipe_argv[pipe_cmd][0], 2);
-		ft_putstr_fd(": command not found\n", 2);
-		exit(127);
-	}
+	if (!cmd_path || access(cmd_path, F_OK) != 0 || access(cmd_path, X_OK) != 0)
+		pipe_error_selector(cmd_path, cmd->pipe_argv[pipe_cmd][0]);
 	execve(cmd_path, cmd->pipe_argv[pipe_cmd], envp);
-	perror("execve");
-	exit(EXIT_FAILURE);
+	pipe_error_selector(cmd_path, cmd->pipe_argv[pipe_cmd][0]);
 }
 
 int	fork_and_exec(t_cmd *cmd, char **envp, int pipe_cmd, int *fds)
