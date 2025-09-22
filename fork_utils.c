@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fork_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpalomin <lpalomin@student.42malaga.com>   +#+  +:+       +#+        */
+/*   By: marco <marco@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 22:58:43 by lpalomin          #+#    #+#             */
-/*   Updated: 2025/08/27 22:58:58 by lpalomin         ###   ########.fr       */
+/*   Updated: 2025/09/22 20:30:27 by marco            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,9 @@ static void	check_and_apply_redirs(t_cmd *cmd, int pipe_cmd)
 	}
 }
 
-static void	pipe_error_selector(char *path, char *argv0)
+static void	pipe_error_selector(char *path)
 {
-	if (!path || access(path, F_OK) != 0)
+	/*if (!path || access(path, F_OK) != 0)
 	{
 		ft_putstr_fd("minishell: ", 2);
 		ft_putstr_fd(argv0, 2);
@@ -52,7 +52,7 @@ static void	pipe_error_selector(char *path, char *argv0)
 		ft_putstr_fd(path, 2);
 		ft_putstr_fd(": Permission denied\n", 2);
 		exit(126);
-	}
+	}*/
 	if (errno == ENOENT)
 	{
 		ft_putstr_fd("minishell: ", 2);
@@ -77,9 +77,9 @@ static void	exec_command_pipe(t_cmd *cmd, char **envp, int pipe_cmd)
 
 	cmd_path = find_command_path(cmd->pipe_argv[pipe_cmd][0], envp);
 	if (!cmd_path || access(cmd_path, F_OK) != 0 || access(cmd_path, X_OK) != 0)
-		pipe_error_selector(cmd_path, cmd->pipe_argv[pipe_cmd][0]);
+		pipe_error_selector(cmd_path);
 	execve(cmd_path, cmd->pipe_argv[pipe_cmd], envp);
-	pipe_error_selector(cmd_path, cmd->pipe_argv[pipe_cmd][0]);
+	pipe_error_selector(cmd_path);
 }
 
 int	fork_and_exec(t_cmd *cmd, char **envp, int pipe_cmd, int *fds)
