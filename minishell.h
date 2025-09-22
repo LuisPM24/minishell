@@ -21,6 +21,7 @@
 # include <stdlib.h>
 # include <sys/types.h>
 # include <sys/wait.h>
+# include <errno.h>
 # include <fcntl.h>
 # include <linux/limits.h>
 # include "libft/libft.h"
@@ -57,6 +58,7 @@ typedef struct s_cmd
 //signals.c
 void	init_signals(void);
 void	sigint_handler(int sig);
+void	sigpipe_handler(int sig);
 // cmd_utils.c
 void	parse_line(t_cmd *cmd, char *line);
 void	modify_status(char character, int *count);

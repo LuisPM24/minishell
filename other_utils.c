@@ -85,7 +85,7 @@ char	*remove_quotes(char *line)
 	{
 		modify_status(line[count1], &status);
 		if (count1 == 0 && status != 0 && (line[count1 + 1] == '<' || line[count1 + 1] == '>'))
-			return (ft_strdup(line));
+			return (free(new_line), ft_strdup(line));
 		else if ((status == 2 && line[count1] != '"') || (status == 1
 				&& line[count1] != '\'') || (status == 0
 				&& line[count1] != '\'' && line[count1] != '"'))

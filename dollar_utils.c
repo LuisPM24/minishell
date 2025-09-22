@@ -19,13 +19,17 @@ int	search_dollars(char *line)
 
 	position = 0;
 	status = 0;
-	if (!line)
+	if (!line || !*line)
 		return (-1);
 	while (line[position])
 	{
 		modify_status(line[position], &status);
 		if (line[position] == '$' && (status == 2 || status == 0))
+		{
+			if (line[position + 1] == '\0')
+				return (-1);
 			return (position);
+		}
 		position++;
 	}
 	return (-1);
@@ -68,7 +72,7 @@ char	*get_dollar_value(char *line, int start, char **envp)
 	if (ft_strncmp(var_name, "?", 2) == 0)
 		return (free(var_name), ft_itoa(g_exit_status));
 	if (ft_strncmp(var_name, "$", 2) == 0)
-		return (ft_strdup("$"));
+		return (free(var_name), ft_strdup("$"));
 	count = 0;
 	while (envp[count])
 	{

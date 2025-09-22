@@ -23,7 +23,9 @@ static void	put_env_var(char **env, char *str)
 	len = 0;
 	while (str[len] && str[len] != '=')
 		len++;
-	name = strndup(str, len);
+	if (str[len] != '=')
+		return ;
+	name = ft_strndup(str, len);
 	if (!name)
 		return ;
 	count = 0;
