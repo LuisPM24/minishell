@@ -12,24 +12,19 @@
 
 #include "minishell.h"
 
-void	remove_argv_range(t_cmd *cmd, int cmd_index, int start, int len)
+static void	cycle(char *line, char **new_line, int *count1, int *count2)
 {
-	char	**av;
-	int		count;
+	int		status;
 
-	av = cmd->pipe_argv[cmd_index];
-	count = start;
-	while (av[count + len])
+	status = 0;
+	while (line[(*count1)])
 	{
-		free(av[count]);
-		av[count] = ft_strdup(av[count + len]);
-		count++;
-	}
-	while (av[count])
-	{
-		free(av[count]);
-		av[count] = NULL;
-		count++;
+		modify_status(line[(*count1)], &status);
+		if ((status == 2 && line[(*count1)] != '"') || (status == 1
+				&& line[(*count1)] != '\'') || (status == 0
+				&& line[(*count1)] != '\'' && line[(*count1)] != '"'))
+			(*new_line)[(*count2)++] = line[(*count1)];
+		(*count1)++;
 	}
 }
 
@@ -38,11 +33,9 @@ char	*remove_last_quotes(char *line)
 	char	*new_line;
 	int		count1;
 	int		count2;
-	int		status;
 
 	count1 = 0;
 	count2 = 0;
-	status = 0;
 	if (!line)
 		return (NULL);
 	new_line = malloc(sizeof(char) * (ft_strlen(line) + 1));
@@ -50,17 +43,7 @@ char	*remove_last_quotes(char *line)
 		return (NULL);
 	if ((line[0] == '"' || line[0] == '\'') && (line[1] == '<'
 			|| line[1] == '>'))
-	{
-		while (line[count1])
-		{
-			modify_status(line[count1], &status);
-			if ((status == 2 && line[count1] != '"') || (status == 1
-					&& line[count1] != '\'') || (status == 0
-					&& line[count1] != '\'' && line[count1] != '"'))
-				new_line[count2++] = line[count1];
-			count1++;
-		}
-	}
+		cycle(line, &new_line, &count1, &count2);
 	else
 		return (free(new_line), ft_strdup(line));
 	new_line[count2] = '\0';

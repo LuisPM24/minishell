@@ -12,6 +12,27 @@
 
 #include "minishell.h"
 
+void	remove_argv_range(t_cmd *cmd, int cmd_index, int start, int len)
+{
+	char	**av;
+	int		count;
+
+	av = cmd->pipe_argv[cmd_index];
+	count = start;
+	while (av[count + len])
+	{
+		free(av[count]);
+		av[count] = ft_strdup(av[count + len]);
+		count++;
+	}
+	while (av[count])
+	{
+		free(av[count]);
+		av[count] = NULL;
+		count++;
+	}
+}
+
 static void	cycle(char **line, int *amount)
 {
 	char	aux_char;
