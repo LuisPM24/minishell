@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   other_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpalomin <lpalomin@student.42malaga.com>   +#+  +:+       +#+        */
+/*   By: mmembril <mmembril@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 10:19:48 by lpalomin          #+#    #+#             */
-/*   Updated: 2025/08/23 09:31:55 by lpalomin         ###   ########.fr       */
+/*   Updated: 2025/09/26 17:42:48 by mmembril         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ char	*remove_last_quotes(char *line)
 	new_line = malloc(sizeof(char) * (ft_strlen(line) + 1));
 	if (!new_line)
 		return (NULL);
-	if ((line[0] == '"' || line[0] == '\'')
-		&& (line[1] == '<' || line[1] == '>'))
+	if ((line[0] == '"' || line[0] == '\'') && (line[1] == '<'
+			|| line[1] == '>'))
 	{
 		while (line[count1])
 		{
@@ -85,12 +85,12 @@ char	*remove_quotes(char *line)
 	while (line[count1])
 	{
 		modify_status(line[count1], &status);
-		if (count1 == 0 && status != 0
-			&& (line[count1 + 1] == '<' || line[count1 + 1] == '>'))
+		if (count1 == 0 && status != 0 && (line[count1 + 1] == '<'
+				|| line[count1 + 1] == '>'))
 			return (free(new_line), ft_strdup(line));
 		else if ((status == 2 && line[count1] != '"') || (status == 1
-				&& line[count1] != '\'') || (status == 0
-				&& line[count1] != '\'' && line[count1] != '"'))
+				&& line[count1] != '\'') || (status == 0 && line[count1] != '\''
+				&& line[count1] != '"'))
 		{
 			new_line[count2] = line[count1];
 			count2++;

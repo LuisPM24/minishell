@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_pipes.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpalomin <lpalomin@student.42malaga.com>   +#+  +:+       +#+        */
+/*   By: mmembril <mmembril@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 20:41:46 by lpalomin          #+#    #+#             */
-/*   Updated: 2025/08/19 09:29:06 by lpalomin         ###   ########.fr       */
+/*   Updated: 2025/09/26 17:08:43 by mmembril         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,10 +51,8 @@ static pid_t	exec_one_pipe(t_cmd *cmd, char **envp,
 	int		is_last;
 	pid_t	pid;
 
-	pipe_fd[0] = -1;
-	pipe_fd[1] = -1;
 	is_last = (pipe_cmd == cmd->amount_cmd - 1);
-	setup_pipe(pipe_fd, is_last);
+	setup_pipe(&pipe_fd, is_last);
 	fds[0] = *prev_fd;
 	fds[1] = pipe_fd[1];
 	if (cmd->amount_cmd == 1 && is_builtin(cmd->pipe_argv[pipe_cmd][0])

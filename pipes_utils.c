@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipes_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpalomin <lpalomin@student.42malaga.com>   +#+  +:+       +#+        */
+/*   By: mmembril <mmembril@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 10:16:21 by lpalomin          #+#    #+#             */
-/*   Updated: 2025/08/23 09:24:33 by lpalomin         ###   ########.fr       */
+/*   Updated: 2025/09/26 17:13:20 by mmembril         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,13 @@ int	is_parent_builtin(char *cmd_name)
 		|| ft_strcmp(cmd_name, "exit") == 0);
 }
 
-int	setup_pipe(int pipe_fd[2], int is_last)
+int	setup_pipe(int (*pipe_fd)[2], int is_last)
 {
+	(*pipe_fd)[0] = -1;
+	(*pipe_fd)[1] = -1;
 	if (is_last)
 		return (0);
-	if (pipe(pipe_fd) == -1)
+	if (pipe(*pipe_fd) == -1)
 		return (perror("pipe"), -1);
 	return (0);
 }

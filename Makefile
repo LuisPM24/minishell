@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: marco <marco@student.42.fr>                +#+  +:+       +#+         #
+#    By: mmembril <mmembril@student.42malaga.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/21 08:37:02 by lpalomin          #+#    #+#              #
-#    Updated: 2025/09/08 16:49:44 by marco            ###   ########.fr        #
+#    Updated: 2025/09/26 17:46:31 by mmembril         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,7 +34,7 @@ SRCS =	minishell.c \
 		more_builtins.c \
 		other_builtins.c \
 		parse_utils.c \
-		other_utils.c
+		other_utils.c \
 
 OBJDIR = objs
 OBJS =	$(SRCS:%.c=$(OBJDIR)/%.o)
