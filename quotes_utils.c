@@ -12,33 +12,39 @@
 
 #include "minishell.h"
 
-int	check_unclosed_quotes(char *line)
+static void	cycle(char **line, int *amount)
 {
 	char	aux_char;
 	int		count;
 	int		inside;
-	int		amount;
 
 	aux_char = '\0';
 	count = 0;
 	inside = 0;
-	amount = 0;
-	while (line[count])
+	while ((*line)[count])
 	{
-		if ((line[count] == '"' || line[count] == '\'') && !inside)
+		if (((*line)[count] == '"' || (*line)[count] == '\'') && !inside)
 		{
-			amount++;
+			(*amount)++;
 			inside = 1;
-			aux_char = line[count];
+			aux_char = (*line)[count];
 		}
-		else if (inside && line[count] == aux_char)
+		else if (inside && (*line)[count] == aux_char)
 		{
-			amount++;
+			(*amount)++;
 			inside = 0;
 			aux_char = '\0';
 		}
 		count++;
 	}
+}
+
+int	check_unclosed_quotes(char *line)
+{
+	int		amount;
+
+	amount = 0;
+	cycle(&line, &amount);
 	if (amount % 2 == 0)
 		return (1);
 	else

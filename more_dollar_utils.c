@@ -12,27 +12,14 @@
 
 #include "minishell.h"
 
-int	search_dollars(char *line)
+static int	handle_offset(char **tmp, int *pos, int *offset)
 {
-	int	position;
-	int	status;
-
-	position = 0;
-	status = 0;
-	if (!line || !*line)
-		return (-1);
-	while (line[position])
-	{
-		modify_status(line[position], &status);
-		if (line[position] == '$' && (status == 2 || status == 0))
-		{
-			if (line[position + 1] == '\0')
-				return (-1);
-			return (position);
-		}
-		position++;
-	}
-	return (-1);
+	if (!(*tmp))
+		return (0);
+	(*offset) = (*pos) + 1;
+	if ((*offset) >= (int)ft_strlen((*tmp)))
+		(*offset) = 0;
+	return (1);
 }
 
 char	*expand_all_dollars(t_cmd *cmd, char *line, char **envp)
@@ -55,11 +42,8 @@ char	*expand_all_dollars(t_cmd *cmd, char *line, char **envp)
 		new_line = expand_dollar_line(cmd, tmp, pos, envp);
 		free(tmp);
 		tmp = new_line;
-		if (!tmp)
+		if (!handle_offset(&tmp, &pos, &offset))
 			return (NULL);
-		offset = pos + 1;
-		if (offset >= (int)ft_strlen(tmp))
-			offset = 0;
 		pos = search_dollars(tmp + offset);
 	}
 	return (tmp);
@@ -89,12 +73,27 @@ void	remove_quotes_pipe_argv(t_cmd *cmd)
 	}
 }
 
+static void	end_expand_dollars(t_cmd *cmd, int *count, char **expanded)
+{
+	char	*rm_quotes;
+
+	free(cmd->argv[(*count)]);
+	rm_quotes = remove_quotes((*expanded));
+	if (rm_quotes && rm_quotes != (*expanded))
+	{
+		free((*expanded));
+		cmd->argv[(*count)] = rm_quotes;
+	}
+	else
+		cmd->argv[(*count)] = (*expanded);
+	(*count)++;
+}
+
 void	expand_dollars(t_cmd *cmd, char **envp)
 {
 	int		count;
 	int		i;
 	char	*expanded;
-	char	*rm_quotes;
 
 	count = 0;
 	while (cmd->argv && cmd->argv[count])
@@ -112,15 +111,6 @@ void	expand_dollars(t_cmd *cmd, char **envp)
 			}
 			continue ;
 		}
-		free(cmd->argv[count]);
-		rm_quotes = remove_quotes(expanded);
-		if (rm_quotes && rm_quotes != expanded)
-		{
-			free(expanded);
-			cmd->argv[count] = rm_quotes;
-		}
-		else
-			cmd->argv[count] = expanded;
-		count++;
+		end_expand_dollars(cmd, &count, &expanded);
 	}
 }

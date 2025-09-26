@@ -67,6 +67,18 @@ char	*remove_last_quotes(char *line)
 	return (new_line);
 }
 
+static int	rm_quotes_val(char *line, int count1, int status)
+{
+	if (count1 == 0 && status != 0
+		&& (line[count1 + 1] == '<' || line[count1 + 1] == '>'))
+		return (1);
+	else if ((status == 2 && line[count1] != '"') || (status == 1
+			&& line[count1] != '\'') || (status == 0
+			&& line[count1] != '\'' && line[count1] != '"'))
+		return (0);
+	return (-1);
+}
+
 char	*remove_quotes(char *line)
 {
 	char	*new_line;
@@ -85,16 +97,10 @@ char	*remove_quotes(char *line)
 	while (line[count1])
 	{
 		modify_status(line[count1], &status);
-		if (count1 == 0 && status != 0
-			&& (line[count1 + 1] == '<' || line[count1 + 1] == '>'))
+		if (rm_quotes_val(line, count1, status) == 1)
 			return (free(new_line), ft_strdup(line));
-		else if ((status == 2 && line[count1] != '"') || (status == 1
-				&& line[count1] != '\'') || (status == 0
-				&& line[count1] != '\'' && line[count1] != '"'))
-		{
-			new_line[count2] = line[count1];
-			count2++;
-		}
+		else if (rm_quotes_val(line, count1, status) == 0)
+			new_line[count2++] = line[count1];
 		count1++;
 	}
 	new_line[count2] = '\0';

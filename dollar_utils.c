@@ -12,6 +12,29 @@
 
 #include "minishell.h"
 
+int	search_dollars(char *line)
+{
+	int	position;
+	int	status;
+
+	position = 0;
+	status = 0;
+	if (!line || !*line)
+		return (-1);
+	while (line[position])
+	{
+		modify_status(line[position], &status);
+		if (line[position] == '$' && (status == 2 || status == 0))
+		{
+			if (line[position + 1] == '\0')
+				return (-1);
+			return (position);
+		}
+		position++;
+	}
+	return (-1);
+}
+
 static char	*get_variable_name(char *line, int start)
 {
 	int	end;
