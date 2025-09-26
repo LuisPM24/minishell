@@ -12,7 +12,30 @@
 
 #include "minishell.h"
 
-char	*expand_all_dollars(char *line, char **envp)
+int	search_dollars(char *line)
+{
+	int	position;
+	int	status;
+
+	position = 0;
+	status = 0;
+	if (!line || !*line)
+		return (-1);
+	while (line[position])
+	{
+		modify_status(line[position], &status);
+		if (line[position] == '$' && (status == 2 || status == 0))
+		{
+			if (line[position + 1] == '\0')
+				return (-1);
+			return (position);
+		}
+		position++;
+	}
+	return (-1);
+}
+
+char	*expand_all_dollars(t_cmd *cmd, char *line, char **envp)
 {
 	char	*tmp;
 	char	*new_line;
@@ -29,7 +52,7 @@ char	*expand_all_dollars(char *line, char **envp)
 	while (pos != -1)
 	{
 		pos += offset;
-		new_line = expand_dollar_line(tmp, pos, envp);
+		new_line = expand_dollar_line(cmd, tmp, pos, envp);
 		free(tmp);
 		tmp = new_line;
 		if (!tmp)
@@ -76,7 +99,7 @@ void	expand_dollars(t_cmd *cmd, char **envp)
 	count = 0;
 	while (cmd->argv && cmd->argv[count])
 	{
-		expanded = expand_all_dollars(cmd->argv[count], envp);
+		expanded = expand_all_dollars(cmd, cmd->argv[count], envp);
 		if (!expanded || expanded[0] == '\0')
 		{
 			free(cmd->argv[count]);
@@ -84,7 +107,7 @@ void	expand_dollars(t_cmd *cmd, char **envp)
 			i = count;
 			while (cmd->argv[i])
 			{
-			cmd->argv[i] = cmd->argv[i + 1];
+				cmd->argv[i] = cmd->argv[i + 1];
 				i++;
 			}
 			continue ;

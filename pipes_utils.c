@@ -41,15 +41,3 @@ void	update_fds(int *prev_fd, int pipe_fd[2])
 	else
 		*prev_fd = -1;
 }
-
-void	wait_for_children(int amount_cmd)
-{
-	int	count;
-
-	count = 0;
-	while (count < amount_cmd)
-	{
-		wait(NULL);
-		count++;
-	}
-}

@@ -12,8 +12,6 @@
 
 #include "minishell.h"
 
-int	g_exit_status = 0;
-
 // My little envp 🌈🦄
 static char	**dup_envp(char **envp)
 {
@@ -58,7 +56,7 @@ static int	init_cmd(t_cmd *cmd)
 	return (0);
 }
 
-static void	print_pipe_argv(t_cmd *cmd)
+/*static void	print_pipe_argv(t_cmd *cmd)
 {
 	int	count;
 
@@ -69,14 +67,14 @@ static void	print_pipe_argv(t_cmd *cmd)
 		printf("pipe_argv is NULL\n");
 		return ;
 	}
-	/*while (cmd->pipe_argv[count])
+	while (cmd->pipe_argv[count])
 	{
 		printf("Command %d\n-----\n", count);
 		print_cmd(cmd->pipe_argv[count]);
 		printf("---------\n");
 		count++;
-	}*/
-}
+	}
+}*/
 
 static void	minishell_procedure(t_cmd *cmd, char *line, char **envp)
 {
@@ -93,7 +91,6 @@ static void	minishell_procedure(t_cmd *cmd, char *line, char **envp)
 	if (cmd->amount_cmd == 0 || !cmd->argv[0] || cmd->argv[0][0] == '\0')
 		return (free_cmd(cmd));
 	parse_pipe_argv(cmd);
-	print_pipe_argv(cmd);
 	cmd->amount_cmd = count_pipes(cmd) + 1;
 	while (cmd->pipe_argv[cmd->amount_cmd])
 		cmd->amount_cmd++;
@@ -115,9 +112,10 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	my_little_envp = dup_envp(envp);
 	init_signals();
+	cmd.exit_status = 0;
 	while (1)
 	{
-		line = readline("\033[0;32mminishell$ \033[0m");
+		line = readline("minishell$ ");
 		if (!line)
 			break ;
 		if (*line)

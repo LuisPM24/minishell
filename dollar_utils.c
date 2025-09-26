@@ -12,29 +12,6 @@
 
 #include "minishell.h"
 
-int	search_dollars(char *line)
-{
-	int	position;
-	int	status;
-
-	position = 0;
-	status = 0;
-	if (!line || !*line)
-		return (-1);
-	while (line[position])
-	{
-		modify_status(line[position], &status);
-		if (line[position] == '$' && (status == 2 || status == 0))
-		{
-			if (line[position + 1] == '\0')
-				return (-1);
-			return (position);
-		}
-		position++;
-	}
-	return (-1);
-}
-
 static char	*get_variable_name(char *line, int start)
 {
 	int	end;
@@ -60,19 +37,11 @@ static char	*get_variable_name(char *line, int start)
 	return (ft_substr(line, start + 1, end - (start + 1)));
 }
 
-char	*get_dollar_value(char *line, int start, char **envp)
+static char	*get_env_value(char *var_name, char **envp)
 {
-	char	*var_name;
 	char	*equal_sign;
 	int		count;
 
-	var_name = get_variable_name(line, start);
-	if (!var_name)
-		return (ft_strdup(""));
-	if (ft_strncmp(var_name, "?", 2) == 0)
-		return (free(var_name), ft_itoa(g_exit_status));
-	if (ft_strncmp(var_name, "$", 2) == 0)
-		return (free(var_name), ft_strdup("$"));
 	count = 0;
 	while (envp[count])
 	{
@@ -82,47 +51,32 @@ char	*get_dollar_value(char *line, int start, char **envp)
 		count++;
 	}
 	if (!envp[count])
-		return (free(var_name), ft_strdup(""));
+		return (ft_strdup(""));
 	equal_sign = ft_strchr(envp[count], '=');
 	if (!equal_sign)
-		return (free(var_name), NULL);
-	free(var_name);
+		return (NULL);
 	return (ft_strdup(equal_sign + 1));
 }
 
-static char	*extract_full_var(char *line, int position)
+char	*get_dollar_value(t_cmd *cmd, char *line, int start, char **envp)
 {
-	int	start;
-	int	count;
+	char	*var_name;
+	char	*value;
 
-	if (!line || line[position] != '$')
-		return (NULL);
-	count = position + 1;
-	if (line[count] == '?')
-		return (ft_substr(line, position, 2));
-	if (!line[count] || !(ft_isalnum(line[count]) || line[count] == '_'))
-		return (ft_substr(line, position, 1));
-	if (line[count] == '{')
-	{
-		start = ++count;
-		while (line[count] && ft_isalnum(line[count]))
-			count++;
-		if (count == start || line[count] != '}')
-			return (NULL);
-		count++;
-	}
-	else
-	{
-		if (!ft_isalnum(line[count]))
-			return (NULL);
-		while (line[count] && ft_isalnum(line[count]))
-			count++;
-	}
-	return (ft_substr(line, position, count - position));
+	var_name = get_variable_name(line, start);
+	if (!var_name)
+		return (ft_strdup(""));
+	if (ft_strncmp(var_name, "?", 2) == 0)
+		return (free(var_name), ft_itoa(cmd->exit_status));
+	if (ft_strncmp(var_name, "$", 2) == 0)
+		return (free(var_name), ft_strdup("$"));
+	value = get_env_value(var_name, envp);
+	free(var_name);
+	return (value);
 }
 
 // Que alguien me mate.c
-char	*expand_dollar_line(char *line, int position, char **envp)
+char	*expand_dollar_line(t_cmd *cmd, char *line, int position, char **envp)
 {
 	char	*full_var;
 	char	*dollar_value;
@@ -133,7 +87,7 @@ char	*expand_dollar_line(char *line, int position, char **envp)
 	full_var = extract_full_var(line, position);
 	if (!full_var)
 		return (ft_putstr_fd("Error: bad substitution", 2), NULL);
-	dollar_value = get_dollar_value(line, position, envp);
+	dollar_value = get_dollar_value(cmd, line, position, envp);
 	if (!dollar_value)
 		dollar_value = ft_strdup("");
 	prefix = ft_substr(line, 0, position);

@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-static void	wait_for_children(int amount_cmd, pid_t last_pid)
+static void	wait_for_children(t_cmd *cmd, int amount_cmd, pid_t last_pid)
 {
 	int		count;
 	int		status;
@@ -25,9 +25,9 @@ static void	wait_for_children(int amount_cmd, pid_t last_pid)
 		if (pid == last_pid)
 		{
 			if (WIFEXITED(status))
-				g_exit_status = WEXITSTATUS(status);
+				cmd->exit_status = WEXITSTATUS(status);
 			else if (WIFSIGNALED(status))
-				g_exit_status = 128 + WTERMSIG(status);
+				cmd->exit_status = 128 + WTERMSIG(status);
 		}
 		count++;
 	}
@@ -60,7 +60,7 @@ static pid_t	exec_one_pipe(t_cmd *cmd, char **envp,
 	if (cmd->amount_cmd == 1 && is_builtin(cmd->pipe_argv[pipe_cmd][0])
 		&& is_parent_builtin(cmd->pipe_argv[pipe_cmd][0]))
 	{
-		g_exit_status = execute_builtin(cmd, envp, pipe_cmd);
+		cmd->exit_status = execute_builtin(cmd, envp, pipe_cmd);
 		update_fds(prev_fd, pipe_fd);
 		return (-1);
 	}
@@ -93,5 +93,5 @@ void	execute_pipes(t_cmd *cmd, char **envp)
 	if (prev_fd != -1)
 		close(prev_fd);
 	if (last_pid != -1)
-		wait_for_children(cmd->amount_cmd, last_pid);
+		wait_for_children(cmd, cmd->amount_cmd, last_pid);
 }

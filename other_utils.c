@@ -48,7 +48,8 @@ char	*remove_last_quotes(char *line)
 	new_line = malloc(sizeof(char) * (ft_strlen(line) + 1));
 	if (!new_line)
 		return (NULL);
-	if ((line[0] == '"' || line[0] == '\'') && (line[1] == '<' || line[1] == '>'))
+	if ((line[0] == '"' || line[0] == '\'')
+		&& (line[1] == '<' || line[1] == '>'))
 	{
 		while (line[count1])
 		{
@@ -84,7 +85,8 @@ char	*remove_quotes(char *line)
 	while (line[count1])
 	{
 		modify_status(line[count1], &status);
-		if (count1 == 0 && status != 0 && (line[count1 + 1] == '<' || line[count1 + 1] == '>'))
+		if (count1 == 0 && status != 0
+			&& (line[count1 + 1] == '<' || line[count1 + 1] == '>'))
 			return (free(new_line), ft_strdup(line));
 		else if ((status == 2 && line[count1] != '"') || (status == 1
 				&& line[count1] != '\'') || (status == 0

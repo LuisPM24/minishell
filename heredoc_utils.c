@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-static void	heredoc_loop(t_redir *redir, char **envp)
+static void	heredoc_loop(t_cmd *cmd, t_redir *redir, char **envp)
 {
 	char	*line;
 	char	*expanded;
@@ -25,7 +25,7 @@ static void	heredoc_loop(t_redir *redir, char **envp)
 			free(line);
 			break ;
 		}
-		expanded = expand_all_dollars(line, envp);
+		expanded = expand_all_dollars(cmd, line, envp);
 		if (!expanded)
 			expanded = ft_strdup("");
 		free(line);
@@ -35,14 +35,14 @@ static void	heredoc_loop(t_redir *redir, char **envp)
 	}
 }
 
-static void	handle_one_heredoc(t_redir *redir, char **envp)
+static void	handle_one_heredoc(t_cmd *cmd, t_redir *redir, char **envp)
 {
 	if (pipe(redir->fd_pipe) == -1)
 	{
 		perror("pipe heredoc");
 		return ;
 	}
-	heredoc_loop(redir, envp);
+	heredoc_loop(cmd, redir, envp);
 	close(redir->fd_pipe[1]);
 }
 
@@ -58,7 +58,7 @@ void	prepare_heredocs(t_cmd *cmd, char **envp)
 		while (redir)
 		{
 			if (redir->type == R_HEREDOC)
-				handle_one_heredoc(redir, envp);
+				handle_one_heredoc(cmd, redir, envp);
 			redir = redir->next;
 		}
 		count++;

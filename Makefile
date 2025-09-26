@@ -20,6 +20,7 @@ SRCS =	minishell.c \
 		quotes_utils.c \
 		dollar_utils.c \
 		more_dollar_utils.c \
+		extract_full_var.c \
 		redirections.c \
 		heredoc_utils.c \
 		redir_utils.c \
@@ -30,6 +31,7 @@ SRCS =	minishell.c \
 		pipes_utils.c \
 		execute_builtins.c \
 		builtins.c \
+		more_builtins.c \
 		other_builtins.c \
 		parse_utils.c \
 		other_utils.c

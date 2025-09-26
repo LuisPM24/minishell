@@ -27,7 +27,6 @@
 # include "libft/libft.h"
 
 extern volatile sig_atomic_t	g_signal;
-extern int						g_exit_status;
 
 typedef enum e_redir_type
 {
@@ -50,6 +49,7 @@ typedef struct s_cmd
 	int		amount_cmd;
 	int		cur_pipe_read;
 	int		cur_pipe_write;
+	int		exit_status;
 	char	**argv;
 	char	***pipe_argv;
 	t_redir	**redirs;
@@ -70,13 +70,14 @@ char	*find_command_path(char *command, char **envp);
 // quotes_utils.c
 int		check_unclosed_quotes(char *line);
 // dollar_utils.c
-char	*expand_dollar_line(char *line, int position, char **envp);
-char	*get_dollar_value(char *line, int start, char **envp);
+char	*expand_dollar_line(t_cmd *cmd, char *line, int position, char **envp);
+char	*get_dollar_value(t_cmd *cmd, char *line, int start, char **envp);
 int		search_dollars(char *line);
 // more_dollar_utils.c
 void	expand_dollars(t_cmd *cmd, char **envp);
 void	remove_quotes_pipe_argv(t_cmd *cmd);
-char	*expand_all_dollars(char *line, char **envp);
+char	*expand_all_dollars(t_cmd *cmd, char *line, char **envp);
+char	*extract_full_var(char *line, int position);
 // redirections.c
 void	handle_redirections(t_redir *list);
 void	handle_append(char *filename);
@@ -123,6 +124,7 @@ int		builtin_export(t_cmd *cmd, int pipe_cmd, char **envp);
 int		builtin_unset(t_cmd *cmd, int pipe_cmd, char **envp);
 int		builtin_env(char **envp);
 int		builtin_exit(t_cmd *cmd, int pipe_cmd);
+ssize_t	safe_write(int fd, const char *s, size_t len);
 // other_utils.c
 char	*remove_quotes(char *line);
 char	*remove_last_quotes(char *line);
