@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marco <marco@student.42.fr>                +#+  +:+       +#+        */
+/*   By: mmembril <mmembril@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 08:47:30 by lpalomin          #+#    #+#             */
-/*   Updated: 2025/09/14 09:59:36 by lpalomin         ###   ########.fr       */
+/*   Updated: 2025/09/26 17:25:27 by mmembril         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,7 @@ static char	**dup_envp(char **envp)
 	{
 		new_env[env_count] = ft_strdup(envp[env_count]);
 		if (!new_env[env_count])
-		{
-			while (env_count-- > 0)
-				free(new_env[env_count]);
-			free(new_env);
-			return (NULL);
-		}
+			return (free_split(new_env), NULL);
 		env_count++;
 	}
 	new_env[env_count] = NULL;
@@ -55,26 +50,6 @@ static int	init_cmd(t_cmd *cmd)
 	cmd->redirs = NULL;
 	return (0);
 }
-
-/*static void	print_pipe_argv(t_cmd *cmd)
-{
-	int	count;
-
-	count = 0;
-	(void)count;
-	if (!cmd->pipe_argv)
-	{
-		printf("pipe_argv is NULL\n");
-		return ;
-	}
-	while (cmd->pipe_argv[count])
-	{
-		printf("Command %d\n-----\n", count);
-		print_cmd(cmd->pipe_argv[count]);
-		printf("---------\n");
-		count++;
-	}
-}*/
 
 static void	minishell_procedure(t_cmd *cmd, char *line, char **envp)
 {
