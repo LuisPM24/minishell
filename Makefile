@@ -6,7 +6,7 @@
 #    By: mmembril <mmembril@student.42malaga.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/21 08:37:02 by lpalomin          #+#    #+#              #
-#    Updated: 2025/09/26 17:46:31 by mmembril         ###   ########.fr        #
+#    Updated: 2025/10/04 16:16:06 by mmembril         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -56,11 +56,11 @@ $(LIBFT):
 	$(MAKE) -C libft/
 
 clean:
-	rm -fr $(OBJDIR)
+	@rm -fr $(OBJDIR)
 	$(MAKE) -C libft/ clean
 
 fclean:	clean
-	rm -f $(NAME)
+	@rm -f $(NAME)
 	$(MAKE) -C libft/ fclean
 
 re: fclean all

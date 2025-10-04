@@ -75,10 +75,10 @@ bonus: all $(BONUS_OBJS)
 	$(AR) $(ARFLAGS) $(NAME) $(BONUS_OBJS)
 
 clean:
-	rm -f $(OBJS) $(BONUS_OBJS)
+	@rm -f $(OBJS) $(BONUS_OBJS)
 
 fclean: clean
-	rm -f $(NAME)
+	@rm -f $(NAME)
 
 re: fclean all
 
